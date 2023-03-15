@@ -1,0 +1,339 @@
+screen checkin 
+    sidebar list amcitem,list inv
+    sections form detail, jscript myscript
+
+	list amcitem
+        caption "Check-In List"
+        table mmadmission
+		order xadmissionno
+        rows 20
+        objects  xadmissionno attrib(link "login?screen=checkin&command=Show&xadmissionno=?"), ~
+                 xpatient,xroom,xadmdate,xstatus
+
+        header "Admission No","Guest ID","Room No","Check-In Date","Status" 
+	end list
+	
+	list inv
+        caption "Bill Information"
+        table opdoheader
+		order xdornum
+        select "xcase='"+xadmissionno+"'"
+        rows 20
+        objects  xdornum attrib(link "login?screen=oppos&command=Show&xdornum=?"), ~
+                 xpatient,xdate,xstatusprint
+
+        header "Invoice No","Guest ID","Date","Status" 
+	end list
+
+	form detail
+        caption "Check-In"
+        table mmadmission
+	    primarykey xadmissionno
+        order xadmissionno
+        select "left(xadmissionno,4)='CHK-'"
+        return "login"
+        layout 3
+        pstyle 3
+        objects Show, Clear,Add,Update, Delete,Create_Reservation,Guest_Registration,Confirm,Check_Out,*next,~
+                Top, Previous, Next, Bottom,~//Price,"</b></font><p>" ,~
+                xadmissionno,xpatient,xpatientdesc,xepisodeno,xstatus,xname display(const),xroom,xroomtype,~
+				xfloor,xnight,xadult,xchild,xadmdate,xadmtime,xcheckindate display(hide),,xondisdate,xdistime,xcheckoutdate display(hide),,zactive display(hide)
+				  
+		field xpatientdesc
+			caption Guest Information
+			attrib local
+			display const
+			event after
+				set Name=mmpatient.xname("xpatient='"+xpatient+"'")
+				set Gender=mmpatient.xsex("xpatient='"+xpatient+"'")
+				set xpatientdesc="Name:"+Name
+				set xpatientdesc=xpatientdesc+"<br>Gender: "+Gender
+			end event
+        end field
+		
+		field xepisodeno
+			caption Reservation No 
+			pick list mmadmdis
+			event after
+			set xepisodeno=mmregistration.xadmissionno("xpatient='"+xpatient+"'")
+			end event
+		end field
+		
+		field xadmissionno
+			caption Check-In ID 
+			pick list mmadmdislst
+		end field
+		
+		field xadmdate
+			caption <span class=sheader style="	BACKGROUND:#563d7c;color:white;PADDING-BOTTOM: 2px;PADDING-LEFT: 7px; PADDING-RIGHT: 75px; 	PADDING-TOP: 2px;">Check IN Date </span>
+			//default #date
+		end field
+		
+		field xondisdate
+			caption <span class=sheader style="	BACKGROUND:#17a2b8;color:white;PADDING-BOTTOM: 2px;PADDING-LEFT: 7px; PADDING-RIGHT: 75px; 	PADDING-TOP: 2px;">Check Out Date </span>
+		end field
+		
+		field xroom
+			//pick list caroom
+			caption Room
+		end field
+		
+		field xname
+			caption Guest Name
+			event after
+			 set xname=mmpatient.xname("xpatient='"+xpatient+"'")
+			end event
+			
+		end field
+		
+		field xadmtype
+			pick "select xcode from xcodes where xtype='Admission Type' and zactive='1' and xcode not in ('Emergency')"
+		end field
+		
+		field xrefdoctor
+			caption Refer Doctor Name
+			width 30
+		end field
+		
+		field xcheckindate
+			attrib local
+			caption Checkin Date
+			caption <span class=sheader style="	BACKGROUND:#17a2b8;color:white;PADDING-BOTTOM: 2px;PADDING-LEFT: 7px; PADDING-RIGHT: 75px; 	PADDING-TOP: 2px;">Check IN Date </span>
+			//display const
+			event after
+				//set xcheckindate=mmadmission.xadmdate("xadmissionno='"+xadmissionno+"'")
+			end event
+		end field
+		
+		field xcheckoutdate
+			attrib local
+			caption Checkout Date
+			caption <span class=sheader style="	BACKGROUND:#17a2b8;color:white;PADDING-BOTTOM: 2px;PADDING-LEFT: 7px; PADDING-RIGHT: 75px; 	PADDING-TOP: 2px;">Check OUT Date </span>
+			//display const
+			event after
+				//set xcheckoutdate=mmadmission.xondisdate("xadmissionno='"+xadmissionno+"'")
+			end event
+		end field
+		
+		field xadmdatelocal
+			attrib local
+			display hidden
+			caption Admission Date
+			event after
+				if xadmissionno .ne. ""
+					set xadmdatelocal=#sesql("select convert(VARCHAR,cast('"+xadmdate+"' as datetime), 106)")
+				else
+					set xadmdatelocal=#sesql(" select convert(VARCHAR,GETDATE(), 106)")
+				end if
+			end event
+		end field
+		
+		field xkinmobile
+			caption <font size=2 color=red>Emergency Contact No (Mobile)</font>
+			embed required placeholder="01XXXXXXXXX"  onblur="validateKinMobile()"
+		end field
+		 
+		field xadmtime
+			//caption Check In Time
+			caption <span class=sheader style="	BACKGROUND:#563d7c;color:white;PADDING-BOTTOM: 2px;PADDING-LEFT: 7px; PADDING-RIGHT: 75px; 	PADDING-TOP: 2px;">Check IN Time </span>
+			//default #time
+		end field
+		
+		field xadmtimelocal
+		    attrib local
+			display hidden
+			caption Admission Time
+			event after
+				if xadmissionno .ne. ""
+				    set xadmtimelocal=#sesql("select FORMAT(CAST('"+xadmtime+"' AS datetime), 'hh:mm tt') ")
+				else 
+					set xadmtimelocal=#sesql("select right(convert(varchar(32),GETDATE(),100),8)")
+				end if
+			end event
+		end field
+		
+		field xadmdtlocal
+			attrib local
+			//column 2 
+			width 180
+			caption <span class=sheader style="	BACKGROUND:#563d7c;color:white;PADDING-BOTTOM: 2px;PADDING-LEFT: 7px; PADDING-RIGHT: 75px; 	PADDING-TOP: 2px;">Check In Information </span>
+			display const
+			event after
+				//set xadmdtlocal=xadmdatelocal+" "+xadmtimelocal
+				set xadmdtlocal="<font size=+1 color=green>"'+xadmdatelocal+'"</font>"+"<font size=+1 color=blue>"'+xadmtimelocal+'</font>"
+			end event
+		end field
+		 
+		field xdistime
+			//caption Check Out Time
+			caption <span class=sheader style="	BACKGROUND:#17a2b8;color:white;PADDING-BOTTOM: 2px;PADDING-LEFT: 7px; PADDING-RIGHT: 75px; 	PADDING-TOP: 2px;">Check Out Time </span>
+			//default #time
+		end field
+		 
+		field xdmtimelocal
+		    attrib local
+			display hidden
+			caption Admission Time
+			event after
+				if xadmissionno .ne. ""
+				 set xdmtimelocal=#sesql("select FORMAT(CAST('"+xdistime+"' AS datetime), 'hh:mm tt') ")
+				else 
+					set xdmtimelocal=#sesql("select right(convert(varchar(32),GETDATE(),100),8)")
+				end if
+			end event
+		end field
+		 
+		field xdmdtlocal
+			attrib local
+			//column 2
+			
+			width 180
+			caption <span class=sheader style="	BACKGROUND:#563d7c;color:white;PADDING-BOTTOM: 2px;PADDING-LEFT: 7px; PADDING-RIGHT: 75px; 	PADDING-TOP: 2px;">Check Out Information </span>
+			display const
+			event after
+				//set xadmdtlocal=xadmdatelocal+" "+xadmtimelocal
+				set xdmdtlocal="<font size=+1 color=green>"'+xdmtimelocal+'"</font>"+"<font size=+1 color=blue>"'+xdmtimelocal+'</font>"
+				
+			end event
+		end field
+		
+		field xpatient
+			width 20
+			caption Guest ID
+			pick list xpatientn
+			embed required 
+        end field
+		
+		field xpatientdesc
+			caption Guest Information
+			attrib local
+			display const
+			event after
+				set Name=mmpatient.xname("xpatient='"+xpatient+"'")
+				set Gender=mmpatient.xsex("xpatient='"+xpatient+"'")
+				set xpatientdesc="Name:"+Name
+				set xpatientdesc=xpatientdesc+"<br>Gender: "+Gender
+			end event
+        end field		
+		
+		field xroomtype
+		    //attrib local
+			display const
+			event after
+			  //set room=caroomdetail.xroom("xbedno='"+xbedno+"'")
+			  //set xroomtype = caroomheader.xdesc("xroom='"+xroom+"'")
+		    end event
+		end field
+		
+		field xfloor
+		    attrib local
+			display const
+			event after
+				set xfloor = caroomheader.xfloor("xroom='"+xroom+"'")
+			end event
+		end field
+		
+		field show
+			event after
+				set xpkey=xitem
+			end event
+        end field
+		
+		field xstatus
+			caption Status
+		end field
+		 
+	
+		field add
+			event before
+				set xadmissionno = #trn("Check-IN ID","CHK-",10)
+				//set xepisodeno=xregistration.xadmissionno("xpatient='"+xpatient+"'")
+				//set xname=mmpatient.xname("xpatient='"+xpatient+"'")
+				set xmobile=mmpatient.xmobile("xpatient='"+xpatient+"'")
+				set xstatus="Open"
+				set xroomtype = caroomheader.xdesc("xroom='"+xroom+"'")
+			end event
+			event after
+				// set temp = #sql("update mmadmission set xstatus='Open' where xadmissionno='"+xadmissionno+"'")
+				action show
+			end event
+		end field
+	  
+		field Confirm
+			event after
+			//print xpatient
+			//print xadmissionno
+			//print xroom
+			//print #id
+			//print #user
+				//
+				set temp = #spsql(zabsp_PRCS_validateAfterAdmission,#id,#user,"mmadmission",xpatient,xadmissionno,xroom,'6')
+				set temp = #sesql("update mmadmission set xstatus='Checked In' where zid='"+#id+"' and xadmissionno='"+xadmissionno+"'") 
+				action show
+			end event
+		end field
+	   
+		field update
+			event before
+				set xname=mmpatient.xname("xpatient='"+xpatient+"'")
+				set xmobile=mmpatient.xmobile("xpatient='"+xpatient+"'")
+				set xroomtype = caroomheader.xdesc("xroom='"+xroom+"'")
+			end event
+		end field
+	   
+		field Guest_Registration
+			width 126
+			height 40
+			embed onclick="clicked(this)"
+		end field
+
+		field Create_Reservation
+			width 126
+			height 40
+			embed onclick="clicked(this)"
+		end field
+
+		field Confirm
+			width 126
+			height 40
+			embed onclick="clicked(this)"
+		end field
+
+		field Check_Out
+		width 100
+		height 40
+		embed onclick="clicked(this)"
+		end field
+
+		embed onsubmit="return submitit(this)"
+ 
+	end form
+ 
+    jscript myscript 
+        <script language="javascript" type="text/javascript">
+        var detail
+        var result
+        function clicked(b){
+          detail=b.value
+        }
+        function submitit(form){
+          result = true
+          if (detail=="Guest_Registration"){
+            form.screen.value = "mmpatient"
+            form.searchbutton.value = "Clear"
+          }
+          if (detail=="Create_Reservation"){
+            form.screen.value = "mmadmission"
+            form.searchbutton.value = "Find xitem=?"
+          }
+		  if (detail=="Check_Out"){
+            form.screen.value = "checkout"
+            form.searchbutton.value = "Find xitem=?"
+          }
+          detail = ''
+          return result
+        }
+        </script>
+	end jscript
+ 
+end screen

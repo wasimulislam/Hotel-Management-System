@@ -1,0 +1,19 @@
+     list xitem
+        caption "Items containing: "+zvalue
+        table caitemview
+        order xitem
+		linksql select xdesc from caitem where xitem
+        //select "(xitem like '%"+zvalue+"%' or xdesc like '%"+zvalue+"%' or xitemold like '%"+zvalue+"%') and zactive='1' and xtypeobj in ('Product')"
+        select "(xitem like '%"+zvalue+"%' or xdesc like '%"+zvalue+"%' ) and zactive='1' and xtypeobj in ('Product')"
+        searchselect "zactive='1' and xtypeobj in ('Product')"
+		lengthfield 2
+		rows 30
+        objects xitem attrib(link "abc" embed onclick="return updateParent(this:'$')"), ~
+               // xdesc,xitemold,xtitem,xgitemdesc//,xitemdept,xitemsubdept//,xshelf
+                xdesc,xgitemdesc//,xitemdept,xitemsubdept//,xshelf
+				
+	
+	headers "Item","Description","Group"
+     end list
+
+

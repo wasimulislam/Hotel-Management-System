@@ -1,0 +1,62 @@
+//Common Codes.menu
+//-------------------------------------------------------------------
+option                           |action
+//-------------------------------------------------------------------
+
+Room Information                      |#classPath+"/login?screen=caroomheader"
+Room Type                        |#classPath+"/login?screen=xcodesroomtype"
+Floor                            |#classPath+"/login?screen=xcodes(xtype=Floor)" 
+Room Charges                     |#classPath+"/login?screen=caitemroom"
+//Product Master                   |#classPath+"/login?screen=caitemall" 
+//Service Item Master          |#classPath+"/login?screen=caitemservice"
+PO Codes & Parameter             |#classPath+"/login?menu=pocodes"
+
+
+//AR Codes & Parameter             |#classPath+"/login?menu=arcodes"
+/////Audit Trail							|#classPath+"/login?screen=*viewcrystal audittrial(4;in,st,st,st;zid,command,firstpar,secpar;xcommand=Action Type,xdegree=1st Param,xdegree=2nd Param, xviewtype=Report View)"                    
+//Bank Name Entry                  |#classPath+"/login?screen=cabank"
+//GL Codes & Parameter             |#classPath+"/login?menu=accodes"
+//HR Codes & Parameter             |#classPath+"/login?menu=pdcodes"
+//IM Codes & Parameter             |#classPath+"/login?menu=imcodes"
+//Leave Update By Admin 			 |#classPath+"/login?screen=pdleaveappadmin"
+//MM Codes & Parameter    |#classPath+"/login?menu=mmcodes"                |ca        |   |100
+//Sales Codes & Parameter          |#classPath+"/login?menu=opcodes"
+//PO Codes & Parameter             |#classPath+"/login?menu=pocodes"
+//VAT	Master		              	 |#classPath+"/login?menu=vat"
+//Approval Setup           		 |#classPath+"/login?menu=apvsetup"
+//Admin Activities     			 |#classPath+"/login?menu=adminupdate"
+//Stock Take                       |#classPath+"/login?menu=imst"        |       |      |120
+////Plant Master                     |#classPath+"/login?screen=xcodesplant"               
+//
+//
+//Row/Location Entry  			  |#classPath+"/login?menu=imstorebin"
+//Currency                         |#classPath+"/login?screen=xcur" 
+//Project Master                   |#classPath+"/login?screen=xcodesproject"
+//Store hierarchy                  |#classPath+"/login?screen=xwhhrc1"   
+//Store                          |#classPath+"/login?screen=xcodesbranch"
+//Terminal                          |#classPath+"/login?screen=xcodesposterminal"  
+//Store Wise Product Tag           |#classPath+"/login?screen=xcodesbranchitemtag" 
+//Store Wise PC IP Tag             |#classPath+"/login?screen=xcodesbranchiptag" 
+//User Wise Product Nature Tag     |#classPath+"/login?screen=xusersbuyer" 
+// 
+//Location Name             		 |#classPath+"/login?screen=xcodeslocationcc"
+//Product Planing                  |#classPath+"/login?screen=xcodes(xtype=Product Planing)"
+//
+////Delivery Location Entry        |#classPath+"/login?screen=xcodesdelivery" 
+////////Increment Update			 |#classPath+"/login?screen=pdsalincheaderadmin"
+////Production Codes & Parameter   |#classPath+"/login?menu=mocodes"
+////Product Type                   |#classPath+"/login?screen=xcodes(xtype=Product Type)"
+////Project Flag                   |#classPath+"/login?screen=xcodes(xtype=Project Flag)"
+////Cost Center                    |#classPath+"/login?screen=xcodescostcenter"
+////Branch                         |#classPath+"/login?screen=xcodesbranch"   
+////Discount Table                 |#classPath+"/login?screen=cadiscount"
+////Product Master                 |#classPath+"/login?menu=immst"
+/////////Country                   |#classPath+"/login?screen=xcodes(xtype=Country)"
+////////Units of Measurements      |#classPath+"/login?screen=xcodes(xtype=Unit of Measure)"
+//
+//IPD Pharmacy Open Do List                 |#classPath+"/login?screen=mmipdpharmareqdo"
+////-------------------------------------------------------------------
+//
+//All Status Master             		 |#classPath+"/login?screen=castatus"
+//SMS Master		                 |#classPath+"/login?screen=smsconfig"
+//SMS List		                 |#classPath+"/login?screen=smsdetail"

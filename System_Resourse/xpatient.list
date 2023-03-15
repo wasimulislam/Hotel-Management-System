@@ -1,0 +1,15 @@
+list xpatient
+		caption "Patient List"
+		//table (select zid,xpatient,xname,xmobile,xbirthdate,xmadd,xsex from mmpatient where zactive=1) as p
+		table mmpatient
+		order xpatient desc
+		linksql select xname from mmpatient
+		select "(xpatient like '%"+zvalue+"%' or xname like '%"+zvalue+"%')"
+		//searchselect "(xpatient like '%zvalue%' or xmobile like '%zvalue%')"
+		lengthfield 3
+		rows 10
+		objects xpatient attrib(link "abc" embed onclick="return updateParent(this:'$')"), ~
+				xname,xmadd,xmobile,xbirthdate,xsex
+		//totals "","Totals","","","","",sum,sum
+		headers "Guest ID","Guest Name","Address","Mobile","Gender"
+end list

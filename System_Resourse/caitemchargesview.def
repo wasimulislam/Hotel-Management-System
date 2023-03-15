@@ -1,0 +1,22 @@
+product ZAB ERP
+
+table caitemchargesview
+
+    caption "Items Charges Master"
+	columns zid,xitem,xdesc,xgitem, xcitem,xunit,xtitem,xitemold,xstype,xtype,xlong,xgenericname
+    primary key zid,xitem,xdesc,xgitem,xcitem,xunit,xtitem,xtype,xlong,xstype,xgenericdesc,xipprice,xopprice
+  
+  foreign key
+        zid references zbusiness.zid
+  end foreign key  
+  
+	sql CREATE view caitemchargesview(zid,xitem,xdesc,xgitem, xcitem,xunit,xtitem,xstype,xtype,xlong,xgenericname,xgenericdesc,xipprice,xopprice) ~	
+	as 	SELECT  dbo.caitem.zid,dbo.caitem.xitem, dbo.caitem.xdesc, dbo.caitem.xgitem, dbo.caitem.xcitem, dbo.caitem.xunit, ~
+				dbo.caitem.xtitem,dbo.xcodes.xstype,dbo.xcodes.xtype,dbo.xcodes.xlong,dbo.caitem.xgenericname,dbo.caitem.xgenericdesc,dbo.caitem.xipprice,dbo.caitem.xopprice ~
+		FROM   dbo.caitem INNER JOIN dbo.xcodes ON dbo.caitem.zid = dbo.xcodes.zid and dbo.caitem.xgitem = dbo.xcodes.xcode ~
+		where dbo.xcodes.xtype IN ('Item Group')  and dbo.caitem.zactive='1'
+                         
+
+end table
+
+

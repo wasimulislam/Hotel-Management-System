@@ -1,0 +1,318 @@
+screen caroomheader
+
+     sidebar list room //one,list consum,list charge
+     sections form one,jscript myscript
+
+     list one
+        caption "Detail List For Room No :</br>"+xdesc
+        table caroomdetail
+        order xroom,xbedno
+        fixed xroom
+        rows 20
+        objects xbedno attrib(link "login?screen=caroomdetail&command=Show&xroom=?&xbedno=?"), ~
+                xstatus
+
+        //totals "","Totals",sum
+
+        //headers none
+     end list
+
+
+     list consum
+        caption "Consumable List For Room No :</br>"+xroom+"-"+xward+"-"+xroomtype+"-"+xwing+"-"+xfloor
+        table caroomcons
+        order xroom,xrow
+        fixed xroom
+        rows 20
+        objects  xrow attrib(link "login?screen=caroomcons&command=Show&xroom=?&xrow=?"), ~
+                 xitem,desc equals((select xdesc from caitem where xitem=caroomcons.xitem)),xwh,xqty
+
+     	header "Row","Item","Description","Store","Qty"
+     end list
+	 
+	 list charge
+        caption "Charge List For Room: </br>"+xdesc
+        table caroomcharge
+        order xroom,xrow
+        fixed xroom
+        rows 20
+        objects  xrow attrib(link "login?screen=caroomcharge&command=Show&xroom=?&xrow=?"), ~
+                 xitem,desc equals((select xdesc from caitem where xitem=caroomcharge.xitem)),xprime
+
+     	header "Row","Item","Description","Amount"
+     end list
+	 
+	 list room
+        caption "Room List: </br>"+xdesc
+        table caroomheader
+        order xroom
+        //fixed xroom
+        rows 20
+        objects  xroom attrib(link "login?screen=caroomheader&command=Show&xroom=?"), ~
+		         xroomtype,xfloor
+
+     	header "Room Code","Room Type","Floor"
+     end list
+
+     form one
+        caption "Room Information"
+        table caroomheader
+	    primarykey xroom
+        order xroom
+        pstyle 3
+        return "login"
+        layout 2
+        objects Show,Clear, Add,Update,Delete,~
+		//Detail,
+		Top, Previous, Next, Bottom,~//Consumable_Setup,"<p>",~//Charge_Setup
+                xroom,xdesc,xclinictype display(hide),xward display(hide),xroomtype,xdeptname display(hide),xwing display(hide),xfloor,~
+                xitem,xitemdesc display(const),xrate display(hide),xamount display(const),xwh display(hide),xwhdesc display(hide),xroomctype,xnote,xpkey display(hide) attrib(local)
+
+		
+		field show
+			event after
+				set xpkey=xroom
+			end event
+        end field
+		
+		
+		
+	   field xroom
+	     caption Room No
+		pick list xroom
+		width 25
+		
+	  end field
+	  
+	  field xroomctype
+		display hide
+	  end field
+	  
+	 field xwh
+		caption Store No.
+		pict list xwhall
+		display hide
+	  end field
+	  
+	  field xwhdesc
+		attrib local
+			display hide
+		caption Store Name
+		event after
+			set xwhdesc=xcodes.xlong("xtype='Branch' and  xcode='"+xwh+"'")
+		end event
+      end field
+	  
+	   field xdesc
+          //display const
+		  //width 150
+		  caption Description
+          
+        end field
+	  
+	  
+
+	  
+	  field xamount
+		 
+	  caption <span class=sheader style="	BACKGROUND:#17a2b8;color:white;PADDING-BOTTOM: 2px;PADDING-LEFT: 7px; PADDING-RIGHT: 25px; 	PADDING-TOP: 2px;">Room Charge Amount (Per Day)</span>
+	  end field
+	  
+		field xclinictype
+			width 30
+			pick code Clinic Type
+			
+			caption Clinic Type		
+			
+		end field
+		
+		//field xdeptname
+		//	column 2
+		//	pick "select xcode,xlong from xcodes where xtype='Department Name' and zactive='1' and xtypeobj='Clinical'"
+		//	display combo2
+		//end field
+		
+		field xward
+		//	pick code Ward
+			pick "select xcode,xlong from xcodes where xtype='Ward' and zactive='1'"
+			caption Ward
+			//display combo2
+		end field
+		
+		field xroomtype
+			width 25
+			// pick code Room Type
+			pick "select xcode,xlong from xcodes where xtype='Room Type' and zactive='1'"
+			caption Room Type
+			display combo2
+		end field
+	  
+	  field xnote
+	  column 2
+	   width 68
+	  
+	  caption Note
+	  end field
+	  
+	 
+	  
+	  field xwing
+			pick code Wing
+		caption Wing
+	  end field
+	  
+	  field xfloor
+			pick code Floor
+		caption Floor
+	  end field
+	
+        field xrate
+          attrib local
+          display hide
+          caption 
+		  caption Rate
+		  
+          event after
+            set xrate=caitem.xipprice("xitem='"+xitem+"'")
+          end event
+        end field
+
+       
+
+        field xitem
+          caption Charge Code
+          pick list xitemroom
+		  
+		  caption Charge Code
+		  
+		  event after
+		    set globals(xdesc)=xdesc
+            set globals(xroom)=xroom
+			set globals(xroomtype)=xroomtype
+			set globals(xwing)=xwing
+			set globals(xfloor)=xfloor
+			set globals(xward)=xward
+			
+          end event
+		  width 25
+        end field
+		
+		field xitemdesc
+			attrib local
+			//display hide
+			caption Charge Code Description 
+			event after
+				set xitemdesc=caitem.xdesc("xitem='"+xitem+"'")
+			end event
+		end field
+		
+		
+		
+		field add
+			event before
+				set xroom=#trim(xroom)
+				set roomtype =#sql("select xlong from xcodes where xtype='Room Type' and xcode='"+xroomtype+"' and zactive='1'")
+				double price =#sql("select xamount from xcodes where xtype='Room Type' and xcode='"+xroomtype+"' and zactive='1'")
+				set xamount=price
+				//if xroom .eq. ""
+				//	error "Please Write Room No."
+				//else if xfloor .eq. ""
+				//	error "Please Select Floor No.!"
+				//else if xwing .eq. ""
+				//	error "Please Select Wing !"
+				//else if xroomtype .eq. ""
+				//	error "Please Select Room Type!"
+				//else if xclinictype .eq. ""
+				//	error "Please Select Clinic Type!"
+				//else if xroomctype .eq. ""
+				//	error "Please Select Type!"
+				//else
+				//	set xdesc=roomtype+" "+"("+xwing+","+xfloor+")"
+				//end if
+			end event
+		end field
+		
+		field Update
+				event before
+				set xroom=#trim(xroom)
+				set roomtype =#sql("select xlong from xcodes where xtype='Room Type' and xcode='"+xroomtype+"' and zactive='1'")
+				double price =#sql("select xamount from xcodes where xtype='Room Type' and xcode='"+xroomtype+"' and zactive='1'")
+				set xamount=price
+				//if xroom .eq. ""
+				//	error "Please Write Room No."
+				//else if xpkey .ne. xroom
+				//error "Please press show first!"
+				//else if xfloor .eq. ""
+				//	error "Please Select Floor No.!"
+				//else if xwing .eq. ""
+				//	error "Please Select Wing !"
+				//else if xroomtype .eq. ""
+				//	error "Please Select Room Type!"
+				//else if xclinictype .eq. ""
+				//	error "Please Select Clinic Type!"
+				//else if xroomctype .eq. ""
+				//	error "Please Select Type!"
+				//else
+				//	set xdesc=roomtype+" "+"("+xwing+","+xfloor+")"
+				//end if
+			end event
+		
+		end field
+
+        field Consumable_Setup
+			width 100
+			height 40
+          embed onclick="clicked(this)"
+		  width 132
+        end field
+		
+		field Charge_Setup
+		width 100
+			height 40
+          embed onclick="clicked(this)"
+		end field
+
+        field Detail
+			width 120
+			height 40
+		 embed onclick="clicked(this)"
+		 
+        end field
+
+		embed onsubmit="return submitit(this)"
+		
+end form
+
+     jscript myscript
+
+        <script language="javascript" type="text/javascript">
+        var but
+        var result
+
+        function clicked(b){
+          but = b.value
+        }
+        function submitit(form){
+          if (but == "Consumable_Setup"){
+            form.screen.value = "caroomcons"
+            form.searchbutton.value = "Clear"
+          }
+		  if (but == "Charge_Setup"){
+            form.screen.value = "caroomcharge"
+            form.searchbutton.value = "Clear"
+          }
+		  
+          if (but == "Detail"){
+            form.screen.value = "caroomdetail"
+            form.searchbutton.value = "Clear"
+          }
+          return result
+        }
+        </script>
+     end jscript
+
+end screen
+
+
+
+

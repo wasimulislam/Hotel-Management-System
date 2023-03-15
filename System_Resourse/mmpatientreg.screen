@@ -1,0 +1,977 @@
+	screen mmpatientreg  
+     sections form one, jscript myscript
+     form one
+        caption "Guest Registration"
+        table mmpatient
+	    primarykey xpatient
+        order xpatient 
+        return "login"
+        layout 3
+        pstyle 3
+        objects Show,Clear,Add,Update,Delete,Return,*next,~//Delete,Top,Previous,Next,Bottom,Send For Approval,
+				//Top,Previous,Next,Bottom,"<p>",~
+                xpatient,xfirst,xlast,xsex,xmobile,~
+				xnationality,xnid,xpassport,xclinic,~
+				
+				xemail,,xdum,~
+				,,,xmadd,xarea,xthana,xcountry,xdate display(const),~//xdum1,,,,xsameas,,,,~
+				//,xpadd,xareaper,xthanaper,xdistrictper,xphoneres display(hide),xphoneoff display(hide),~
+				
+				zactive display(hide),xpkey attrib(local) display(hide),xnote display(hide),xstatuscus display(hide),//xdemo//xgcus
+
+				//hide for slowness issues	//
+		field xfirst
+			caption First Name
+		end field
+		
+		field xclinic
+			caption VISA 
+			width 30
+		end field
+		
+		field xnationality
+		pick
+		display text
+		end field
+		
+		field xcountry
+		pick
+		display text
+		end field
+		
+		//field xborntime
+		//	Caption Birth Time For New Baby
+		//end field
+		
+		//field xmonth
+		//	caption Month
+		//	embed placeholder=""  onkeyup="validateMonth()"
+		//end field
+		
+		//field xday
+		//	caption Day
+		//	embed placeholder=""  onkeyup="validateDay()"
+		//end field
+
+		//field xposition
+		//	caption Employee ID
+		//end field
+		
+		//field xpositiondesc
+		//	attrib local
+		//	display const
+		//	caption Employee Name
+		//	event after
+		//		set xpositiondesc = pdmst.xname("xposition='"+xposition+"'")
+		//	end event
+		//end field
+		
+		//field xpositiondeptdeg
+		//	attrib local
+		//	display const
+		//	caption Employee Department and Designation Name
+		//	event after
+		//		set deptname =""+pdmstview.departmentname("xposition='"+xposition+"'")
+		//		set designame=""+pdmstview.designationname("xposition='"+xposition+"'")
+		//		set xpositiondeptdeg=""+deptname+""" -- "+designame+""
+		//	end event
+		//end field
+		
+		field xvillage
+			caption Village/Street
+		end field
+		
+		field xpvillage
+			width 40
+		end field
+		
+		field xpolicy
+			width 40
+		end field
+			
+		field xmother
+			pick list xmother
+		end field
+
+		//field xmoname
+		//	  attrib local
+		//	  display const
+		//	  caption Mother's Name
+		//	  event after
+		//		set xmoname = mmpatient.xname("xpatient='"+xmother+"'")
+		//	  end event
+		//end field
+		
+
+		//field xpaadmittype
+		//	caption Patient Type
+		//	Default "General"
+		//end field
+		
+		field xhinsurance
+			Default "Yes"
+			display combo
+			embed onchange="changeCat(this)"
+		end field
+	
+	//  field xpatient
+	//	pick ",Mr.,Ms.,Mrs"//list xpatientall
+	//	caption 
+	//	default "Mr."
+	//	display combo
+	//	  width 39
+	//		event after
+	//			set globals(xpatient)=xpatient
+	//			//class careports(getReport{mmpatientidcard;2;in,st;zid,patient;xpatient;Guest Membership Card})
+	//			if xpatient .ne. ""
+	//				set #field(xregtype.display) = "const"
+	//				//set #field(send.attrib) = "disabled"
+	//				//set #field(zactive.display) = "const"
+	//			end if
+	//			 set status=mmpatient.xstatuscus("xpatient='"+xpatient+"'")
+	//			set activity=mmpatient.zactive("xpatient='"+xpatient+"'")
+	//			if status .ne. "Open" .and. status .ne. "Rejected"
+	//			 set #field(Send.attrib) = "disabled"
+	//			end if
+	//			if activity .ne. "0"
+	//			 set #field(Send.attrib) = "disabled"
+	//			end if
+	//		end event
+	//		//embed href="#" onclick="myFunction()"
+	//		//embed href="#" onmouseout="outFunc()"
+	//	end field
+	
+	field xpatient
+          width 20
+		  caption Guest ID
+			//pick list xpatientall
+			//embed required
+			event after
+			end event
+        end field
+		
+		//field xageyear
+		//	caption <font color=#d04541 >Age(Year) *</font>
+		//	embed placeholder=""  onkeyup="validateAge()"
+		//end field
+		//
+		//field xregtype
+		//	display readio horizontal
+		//end field
+		
+		
+		//field patient
+		//caption <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16" style="margin-left: 40px;color: #5b3b8f;"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"></path><path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"></path></svg>
+      	//attrib local
+		//display const      	
+		//event after
+		//set patient = "Attache Document"
+      	//end event
+		//	embed href="#" onclick="showModalPopUp()"
+        //end field
+		
+		//field pic
+		//	caption 
+		//	attrib local
+		//	display const
+		//	event after
+		//		//set pic =mmpatient.xfile("xpatient='"+xpatient+"'")
+		//		set pic = "<object border=0 data="+"images/carimg/"+xpatient+".png type=""text/plain"" height=150 width=150></object></br>"
+		//	end event
+		//end field
+
+	
+		//field xsameas
+		//	caption  
+		//	embed href="#" onclick="checkaddress()"
+		//end field
+		
+		
+		
+		field xarea
+			caption State / Province
+			display text
+			width 40
+			pick
+		end field
+		
+		field xnid
+		width 40
+		end field
+		
+		
+		field xareaper
+			caption Area
+			display text
+			width 40
+			pick
+		end field
+		
+		field xdum
+		  attrib local
+		  display const
+		  caption <font color=maroon size=+2>Address</font>
+		  //column 
+		end field
+		
+		//field xdum1
+		//  attrib local
+		//  display const
+		//  caption <font color=maroon size=+2>Permanent Address</font>
+		//  //column 
+		//end field
+		
+			
+		//field xname
+		// //embed required 
+		// //display const
+		// caption Full Name
+		// event after
+		//	 
+		// end event
+		//end field
+		
+		
+		field xsex
+		  //width 40	  
+			//embed required
+			display radio-horizontal
+		end field
+		
+	
+		field xbirthdate
+			caption <font color=#d04541 >Date of Birth *</font>
+			Default "2999-01-01"
+		  width 38
+		end field
+		
+		field xthana
+		  //display combo
+		  caption City
+		  width 40
+		end field
+		
+		field xbirthplace
+		  width 40
+		end field
+		
+		field xvoterid
+		  width 40
+		end field
+		
+		field xpassport
+		  width 40
+		end field
+		
+		field xcitizenship
+			width 40
+		end field
+		
+		field xlanguage
+			width 40
+			display radio-horizontal
+		end field
+		
+		field xoccupation
+			pick "select xcode,xlong from xcodes where xtype='Occupation' and zactive='1'"
+			display combo2
+			
+			width 40
+		end field
+		
+		
+		field xmobile
+			width 40
+			embed required placeholder="01XXXXXXXXX"  onblur="validateMobile()"
+			caption Phone No.
+		end field
+		
+		field xemail
+			width 40
+			embed onblur="validateEmail()"
+			
+		end field
+		
+		field xspousemobile
+			width 40
+		end field
+		
+		field xlgmobile
+			width 40
+		end field
+		
+		field xvillage
+			width 40
+		end field
+		
+        field xcus
+		  width 38
+		  caption Payer ID (For Corporate Clients)
+        end field
+		
+		field xcusdesc
+			attrib local
+			display const
+			caption Name of Payer
+			event after
+				set xcusdesc=cacus.xorg("xcus='"+xcus+"'")
+			end event
+        end field
+		
+		field xstaff
+        	caption Corporate Staff ID
+        	pick
+        end field
+		
+		field xmadd
+			caption Village/Street
+			display text
+			width 41
+		end field
+		
+		
+		field xpadd
+			caption Village/Street
+			display text
+			width 41
+		end field
+		
+		
+		field xorg
+			width 38
+			caption Insurance Company ID
+			pick list cacusins
+			//display combo2
+			//pick "select xcus,xorg from cacus where zid ='"+#id+"' and xtype='Customer'"
+		end field
+		
+		field xorgdesc
+			attrib local
+			display const
+			caption Name of Insurance Company
+			event after
+				set xorgdesc=cacus.xorg("xcus='"+xorg+"'")
+			end event
+        end field
+
+		
+		
+		field xdum2
+		  attrib local
+		  display const
+		  caption 
+		  //column 
+		end field
+		
+		field xdum3
+		  attrib local
+		  display const
+		  caption 
+		  //column 
+		end field
+
+		field xdum4
+		  attrib local
+		  display const
+		  caption <font color=maroon size=+2>Kin Information</font>
+		  //column 
+		end field
+		
+		field xkin
+			width 40
+			//embed required
+		end field
+		
+		field xkinadd
+			width 41
+		end field
+		
+		field xkinphoneres
+			width 40
+		end field
+		
+		field xkinmobile
+			width 40
+			embed placeholder="01XXXXXXXXX"  onblur="validateKinMobile()"
+		end field
+		
+		
+
+        field xdate
+			width 80
+          caption Date of Registration
+        end field
+        
+        field xgcus
+          pick code Patient Group
+        end field
+
+        
+        field xmidname
+        	attrib local
+        	display const
+        	caption Name of Mother
+        	event after
+        		set xmidname=mmpatient.xname("xpatient='"+xmid+"'")
+        	end event
+        end field
+		
+		field xnote
+			caption Remarks
+			width 80
+			height 2
+			column 2
+		end field
+		
+		//field xdemo
+		//attrib local
+		//display const
+		//caption <select name="category" id="category" size="5"><option value="">Select</option>
+   		//end field
+		
+		
+		field show
+			event after
+			
+				set xpkey=xpatient
+			end event
+        end field
+		
+		field Return
+			embed onclick="clicked(this)"
+		end field
+		
+        field next
+			event after
+				set xpkey=xpatient
+			end event
+        end field
+		
+        field previous
+			event after
+				set xpkey=xpatient
+			end event
+        end field
+		
+		field Top
+			event after
+				set xpkey=xpatient
+			end event
+        end field
+		
+        field Bottom
+			event after
+				set xpkey=xpatient
+			end event
+        end field
+
+
+        
+        field add
+			
+          event before
+		  
+		   set xname=xnamef+" "+xnamem+" "+xnamel
+			
+			//set xregtype="Normal"
+		    set xstatuscus="Open"
+			
+			
+			if xregtype .eq. "Normal" 
+			  set zactive="1"
+			 else 
+			 set zactive="0"
+			end if 
+		    set name=#sql("select xname from mmpatient where xmobile='"+xmobile+"' and xname='"+xname+"'")
+		
+			if xsameas .eq. "1"
+				set xpadd=xmadd
+				set xareaper=xarea
+				set xthanaper=xthana
+				set xdistrictper=xdistrict
+			
+			end if
+			
+			if xmother .ne. ""
+				set xmadd=#sql("select xmadd from mmpatient where xpatient='"+xmother+"'")
+				set xarea=#sql("select xarea from mmpatient where xpatient='"+xmother+"'")
+				set xthana=#sql("select xthana from mmpatient where xpatient='"+xmother+"'")
+				set xdistrict=#sql("select xdistrict from mmpatient where xpatient='"+xmother+"'")
+				set xsameas=#sql("select xsameas from mmpatient where xpatient='"+xmother+"'")
+				set xpadd=#sql("select xpadd from mmpatient where xpatient='"+xmother+"'")
+				set xareaper=#sql("select xareaper from mmpatient where xpatient='"+xmother+"'")
+				set xthanaper=#sql("select xthanaper from mmpatient where xpatient='"+xmother+"'")
+				set xdistrictper=#sql("select xdistrictper from mmpatient where xpatient='"+xmother+"'")
+				set xreligion=#sql("select xreligion from mmpatient where xpatient='"+xmother+"'")
+				set xcus=#sql("select xcus from mmpatient where xpatient='"+xmother+"'")
+				set xnationality=#sql("select xnationality from mmpatient where xpatient='"+xmother+"'")
+				set xpaadmittype=#sql("select xpaadmittype from mmpatient where xpatient='"+xmother+"'")
+			end if
+		     
+			
+			//if xnamef .eq. ""
+			//  error "Name field is mandatory"
+			//else if xsex .eq. "" 
+			//  error "Please select gender Male/Female"
+			//else if xmobile .eq. ""
+			//  error "Please enter mobile number"
+			//else if xname .eq. name
+			//error "Cannot Proceed--Patient Already exist"
+			//
+		    //else if xageyear .eq. "0" .and. #sub(xbirthdate,0,4).eq. "2999" .and. xmonth .eq. "0" .and. xday .eq. "0"
+			// error "Please Select Date of Birth Or Age Or Month Or Day"
+			//else if xageyear>150
+			//	error "Please Select Correct Age(Year)"
+			//else
+				set patient = #trn("Guest Number","GID-",10)
+				set xpatient=#sub(patient,4,#len(patient))				
+				
+			//end if
+          end event
+		  
+          event after
+		  //print #sub(xbirthdate,0,4)
+       	    //set temp = #spsql(zabsp_PRCS_getAge,#id,#user,"mmpatient",xpatient,xbirthdate)
+			//if xregtype .eq. "Normal"
+			//set temp = #spsql(zabsp_PRCS_createDO,#id,#user,"registration","",xpatient,xdate,"OPD","",xpatient,0)
+			//end if
+			print "Guest Registration Successful"
+            action show
+          end event
+        end field
+
+        field update
+          event before
+		//	int xday
+		//	set xday=#sesql("select datediff(day,'"+xbirthdate+"',getdate())")
+			set xname=xnamef+" "+xnamem+" "+xnamel
+			if xpkey .ne. xpatient
+				error "Please show first"
+			// else if xageyear .eq. ""
+			 //error "Please enter Age"
+			//else if xday<0
+			  //error "Wrong Birth Date"
+			end if
+          end event
+
+          event after
+			set temp = #spsql(zabsp_PRCS_getAge,#id,#user,"updateage",xpatient,xbirthdate)
+            action show	
+          end event
+        end field
+		
+		
+		
+		field send
+			event before
+			end event
+			event after
+			
+			set process2="zabsp_Confirmed_Request,"+#id+","+#user+" ,"+#position+","0","+xpatient+","Complementary Patient Approval""
+			set temp=#sesql("exec zabsp_spcontroler '"+#id+"','"+#user+"','screen: mmpatient','"+process2+"'")
+			
+				//set temp =  #spsql(zabsp_Confirmed_Request,#id,#user,#position,0,xpatient,"Complementary Patient Approval")
+				
+				action show
+			end event
+        end field
+		
+		
+		field Image_Upload
+			width 105
+			height 40
+		 event after
+			set temp=#spsql(zab_sp_picinsert,#id,#user,"mmpatient","ximage",xpatient)
+		 end event
+		end field
+		
+        field Payer
+          embed onclick="clicked(this)"
+        end field		
+
+     embed onsubmit="submitit(this)"
+     end form
+
+    jscript myscript
+		<script src="oslalert2.js"></script>
+		<script src="dropzone.js"></script>
+		<script src="dropzone-amd-module.js"></script>
+        <script language="javascript" type="text/javascript">
+		
+		var detail
+		var picname
+		
+        function clicked(b){
+          detail=b.value
+        }
+		function upload(b){
+          //window.open("https://www.dropbox.com/s/y7uffd7ah8cpzcu/10.pdf","toolbar=0,location=0,directories=0,status=0,menubar=0,scrollbars=0,center=0,alwaysRaised=yes,resizable=yes,width=600,top=0,left=600")
+		  window.open("//localhost:8080/zabimage")
+		}
+		function pic(b){
+			var img = document.one.xpatient.value
+			window.open("//localhost:8080/zab/images/carimg/"+img+".png", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=50,left=350,width=550,height=600");	
+			window.open("//localhost:8080/zab/images/carimg/"+img+".png", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=50,left=350,width=550,height=600");	
+					
+		}
+        function submitit(form){
+          result = true
+          if (detail == "Return"){
+            form.screen.value = "mmadmission"
+            form.searchbutton.value = "Clear"
+          }
+        }
+
+	 function validateMobile()
+        {
+            var x = document.one.xmobile.value;
+           if (x==""){
+		   
+		   }
+		   
+		   else if(isNaN(x)|| x.indexOf(" ")!=-1)
+           {
+              alert("Mobile number should be numeric");
+			  setTimeout(function() { one.xmobile.focus(); });
+           }
+		   
+		  
+           else if (x.charAt(0)!="0")
+           {
+              alert("Mobile number should be start with 0");
+			  setTimeout(function() { one.xmobile.focus(); });
+           }
+		   else if (x.length<11 || x.length>11)
+           {
+              alert("Mobile number should be 11 digit");
+			  setTimeout(function() { one.xmobile.focus(); });
+           }
+        }
+		
+		
+		
+	function validateEmail()
+        {
+			var y = document.getElementById("xemail").value;
+			 
+		   if(y==""){
+			return true;
+		   }
+		   
+		   else if(xemail.value.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/))
+           {
+             ///alert("valid email address");
+			 return true;
+           }
+  
+           else
+           {
+			alert("You have entered an invalid email address!");
+			setTimeout(function() { one.xemail.focus(); 0});
+			return false;
+           }
+        }
+		
+		
+		
+	function validateAge()
+        {
+            var x = document.one.xageyear.value;
+	var decimal=  /^[-+]?[0-9]+\.[0-9]+$/; 
+           if(isNaN(x)||x.indexOf(" ")!=-1)
+           {
+              alert("Age should be numeric")
+			 setTimeout(function() { one.xageyear.focus(); });
+           }
+		   else if (/^[-]?((\d+)|(\d+\.\d+)|(\.\d+))$/.test($(".double").val()))
+		   {
+				alert("Age should be numeric")
+			 setTimeout(function() { one.xageyear.focus(); });
+		   }
+		    else if (xageyear.value.match(decimal))
+		   {
+			alert("Age should be numeric")
+			 setTimeout(function() { one.xageyear.focus(); });
+		   }
+		 
+		 else if (x=="")
+		   {
+		   } 
+		   
+        }	 
+		
+	function validateMonth()
+        {
+            var x = document.one.xmonth.value;
+	var decimal=  /^[-+]?[0-9]+\.[0-9]+$/; 
+           if(isNaN(x)||x.indexOf(" ")!=-1)
+           {
+              alert("Age should be numeric")
+			 setTimeout(function() { one.xmonth.focus(); });
+           }
+		   
+		else if (xageyear.value.match(decimal))
+	   {
+		alert("Age should be numeric")
+		 setTimeout(function() { one.xageyear.focus(); });
+	   }
+	   else if (x=="")
+	   {
+	   }
+        }	 
+		
+	
+	function validateDay()
+        {
+            var x = document.one.xday.value;
+	var decimal=  /^[-+]?[0-9]+\.[0-9]+$/; 
+           if(isNaN(x)||x.indexOf(" ")!=-1)
+           {
+              alert("Age should be numeric")
+			 setTimeout(function() { one.xday.focus(); });
+           }
+		   
+		else if (xageyear.value.match(decimal))
+	   {
+		alert("Age should be numeric")
+		 setTimeout(function() { one.xageyear.focus(); });
+	   }
+	   else if (x=="")
+	   {
+	   }
+        }	 
+		
+	
+			function errEvent(){
+			//Swal.fire(	'Good job!',  'You clicked the button!', 'success')	
+			
+			//	Swal.fire({ position: 'top-end', icon: 'success', title: 'Your work has been saved', showConfirmButton: false, timer: 1500})
+			(async () => {
+
+			const { value: file } = await Swal.fire({
+			  title: 'Select image',
+			  input: 'file',
+			  acceptedFiles: 'png,pdf',
+			  inputAttributes: {
+				'accept': 'image/*',
+				'aria-label': 'Upload your profile picture'
+			  }
+			})
+
+			if (file) {
+			  const reader = new FileReader()
+			  reader.onload = (e) => {
+				Swal.fire({
+				  title: 'Your uploaded picture',
+				  imageUrl: e.target.result,
+				  imageAlt: 'The uploaded picture'
+				})
+			  }
+			  reader.readAsDataURL(file)
+			}
+
+			})()		
+						
+				}
+				
+
+		var popUpObj;
+		
+
+		function showModalPopUp()
+		{
+			var picture_id = document.getElementById('xpatient').value;
+			
+			if (picture_id=="")
+		   {
+				Swal.fire({
+				  icon: 'error',
+				  title: 'Oops...',
+				  text: 'Please Enter Patient ID!',
+				})
+				return false;
+		   }
+           else (picture_id!="")
+           {
+           //     alert("Success");
+           }
+			//alert(patient);
+			
+			popUpObj=window.open("/zabimage/?picture_id="+picture_id,
+
+			"ModalPopUp",
+
+			"toolbar=no," +
+
+			"scrollbars=no," +
+
+			"location=no," +
+
+			"statusbar=no," +
+
+			"menubar=no," +
+
+			"resizable=0," +
+
+			"width=500," +
+
+			"height=400," +
+
+			"left = 490," +
+
+			"top=300"
+			);
+			popUpObj.focus();
+
+			LoadModalDiv();
+			
+
+		}
+		
+	function LoadModalDiv()
+    {
+        var bcgDiv = document.getElementById("divBackground");
+        bcgDiv.style.display="block";
+    }
+	
+	 function HideModalDiv()
+     {
+        var bcgDiv = document.getElementById("divBackground");
+        bcgDiv.style.display="none";
+     }
+	 
+	  function OnClose()
+  {
+    if(window.opener != null && !window.opener.closed) 
+    {
+       window.opener.HideModalDiv();
+    }
+  }
+  window.onunload = OnClose;
+
+	function validateKinMobile()
+	
+        {
+            var x = document.one.xkinmobile.value;
+           if(isNaN(x)||x.indexOf(" ")!=-1)
+           {
+              alert("Mobile number should be numeric")
+             // one.xkinmobile.focus();
+			 setTimeout(function() { one.xkinmobile.focus(); });
+           }
+		   else if (x=="")
+		   {
+				//alert("test")
+				//setTimeout(function() { one.xnationality.focus(); });
+		   }
+           
+           else if (x.charAt(0)!="0")
+           {
+                alert("Mobile number should be start with 0");
+			 setTimeout(function() { one.xkinmobile.focus(); });
+           }
+		   else if (x.length<11 || x.length>11)
+           {
+                alert("Mobile number should be 11 digit");
+              //  one.xkinmobile.focus();
+			  setTimeout(function() { one.xkinmobile.focus(); });
+           }
+        }	 
+		
+		function myFunction() {
+		  var copyText = document.getElementById("xpatient");
+		  copyText.select();
+		  copyText.setSelectionRange(0, 99999);
+		  document.execCommand("copy");
+		  
+		  var tooltip = document.getElementById("myTooltip");
+		  tooltip.innerHTML = "Copied: " + copyText.value;
+		}
+
+		function outFunc() {
+		  var tooltip = document.getElementById("myTooltip");
+		  tooltip.innerHTML = "Copy to clipboard";
+		}		
+		
+		function checkaddress() {
+	//	var checkbox = document.getElementById('fluency');
+		var checkbox = document.querySelector(".trntextbox");
+		var inputVal = document.getElementById("xmadd").value;
+		var area = document.getElementById("xarea").value;
+		var thana = document.getElementById("xthana").value;
+		var district = document.getElementById("xdistrict");
+		var districts = district.options[district.selectedIndex].value;
+            if (checkbox.checked != false) {
+                document.querySelector('input[name="xpadd"]').value = inputVal;
+		 document.querySelector('input[name="xareaper"]').value = area;
+		 document.querySelector('input[name="xthanaper"]').value = thana;
+		 document.querySelector('input[name="xdistrict"]').value = districts;
+               // alert(inputVal)
+            } else {
+               document.querySelector('input[name="xpadd"]').value = '';
+		document.querySelector('input[name="xareaper"]').value = '';
+		document.querySelector('input[name="xthanaper"]').value = '';
+		document.querySelector('input[name="xdistrict"]').value = '';
+				
+            }
+        }
+		
+		
+		//	<script>
+		
+        var Yes = ["Soup", "Juice", "Tea", "Others"];
+        var No = ["Soup", "Juice", "Water", "Others"];
+		var Pick = ["Soup", "Juice", "Water", "Others"];
+
+        var changeCat = function changeCat(firstList) {
+            var newSel = document.getElementById("category");
+            //if you want to remove this default option use newSel.innerHTML=""
+            newSel.innerHTML = "<option value=\"\">Select</option>"; // to reset the second list everytime
+            var opt;
+
+            //test according to the selected value
+            switch (firstList.options[firstList.selectedIndex].value) {
+                case "Yes":
+                    for (var i = 0; len = Yes.length, i < len; i++) {
+                        opt = document.createElement("option");
+                        opt.value = Yes[i];
+                        opt.text = Yes[i];
+                        newSel.appendChild(opt);
+                //   document.getElementById('xorg').style.display = 'none';
+				//	document.getElementById('xref').style.display = 'none'; 
+				//	document.getElementById('xdatechqdatediv').style.display = 'none'; 
+					document.getElementById('xorg').style.display = 'flex'; 
+						}
+                    break;
+                case "No":
+                    for (var i = 0; len = No.length, i < len; i++) {
+                        opt = document.createElement("option");
+                        opt.value = No[i];
+                        opt.text = No[i];
+                        newSel.appendChild(opt);
+					document.getElementById('xorg').style.display = 'none'; 
+					
+                    }
+                    break;
+                case "Pick":
+                    for (var i = 0; len = Pick.length, i < len; i++) {
+                        opt = document.createElement("option");
+                        opt.value = Pick[i];
+                        opt.text = Pick[i];
+                        newSel.appendChild(opt);
+					document.getElementById('xorg').style.display = 'none'; 
+                    }
+                    break;
+            }
+
+        }
+  //  </script>
+		
+		
+		
+        </script>
+     end jscript
+
+
+
+end screen

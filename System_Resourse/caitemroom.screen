@@ -1,0 +1,132 @@
+screen caitemroom
+
+     sidebar list one
+     sections form detail, jscript myscript
+
+     list one
+	 caption "Room Charges List"
+        table caitemchargesview
+        order xitem
+        select "xgitem='1009'"
+        rows 20
+        objects  xitem attrib(link "login?screen=caitemroom&command=Show&xitem=?"), ~
+                 xdesc
+
+        header "Item","Description"//,"Old Code"
+				
+
+     end list
+
+     form detail
+        caption "Room Charges"
+        table caitem
+		primarykey xitem
+        order xitem
+		select "xgitem='1009'"
+        return "login"
+        layout 2
+        pstyle 3
+        objects Show, Clear,Add,Update, Delete,*next,Top, Previous, Next, Bottom,Price,"</b></font><p>" ,~
+          xitem width(20), ~
+          xdesc width(50), ~
+		  xtitem display(hide),xunitpur display(hide),xunitsel display(hide),xcfpur display(hide),xcfsel display(hide),~
+          xopprice ,xstype display(hide),xgitem display(hide),zactive,xpkey attrib(local) display(hide)
+          
+		
+		field show
+			event after
+				set xpkey=xitem
+			end event
+        end field
+		
+		field xopprice
+		caption Price
+		end field
+		
+        field xitem
+			pick list xitemroom
+          event after
+            set globals(xitem)=xitem
+			if xitem .ne. ""
+			set #field(xopprice.display)="const"
+			set #field(xipprice.display)="const"
+			end if
+          end event
+        end field
+
+        field xnote
+       //   column 2
+        end field
+
+        
+
+			field add
+			event before
+			set desc=caitem.xdesc("xdesc='"+xdesc+"' and xgitem='1009'")
+			set xgitem="1009"
+			//set xstype="Non-Stock"
+			set xunitpur="Day"
+			set xunitsel="Day"
+			set xcfpur =1
+			set xcfsel= 1
+			
+			if xdesc .eq. ""
+			error "Please Write Product Description!"
+			else if desc .eq. xdesc
+			error "Product Already Exist!"
+			else if xopprice<=0.00 .and. xipprice<=0.00
+			error " Please Add Price for Charge!"
+			else
+
+			set zactive="1"
+			set item = #trn("Item Code","IC--",10)
+			set xitem=#sub(item,4,#len(item))
+			end if	
+
+			end event
+			end field
+		
+		field update
+            event before
+				if xpkey .ne. xitem
+				error "Please press show first!"
+				end if 
+				if xdesc .eq. ""
+				error "Please Select Charge Description!"
+				else if xopprice<=0.00 .and. xipprice<=0.00
+				error " Please Add Price for Charge!"
+				end if
+			end event
+	  end field 
+		
+        embed onsubmit="return submitit(this)"
+
+        field Price
+          embed onclick="clicked(this)"
+		  width 100
+		  height 40
+        end field
+
+     end form
+
+
+     jscript myscript
+
+        <script language="javascript" type="text/javascript">
+        var detail
+        var result
+        function clicked(b){
+          detail=b.value
+        }
+        function submitit(form){
+          result = true
+          if (detail=="Price"){
+            form.screen.value = "caitempriceroom"
+            form.searchbutton.value = "Find xitem=?"
+          }
+        }
+        </script>
+     end jscript
+
+
+end screen

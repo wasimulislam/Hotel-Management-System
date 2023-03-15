@@ -1,0 +1,17 @@
+     list xroom
+        caption "Room No Containing: "+zvalue
+        table caroomhdview
+        order xroom
+		linksql select xdesc from caroomheader
+        select "(xroom like '%"+zvalue+"%' or xroomtype like '%"+zvalue+"%')"
+		//searchselect "xopd='Yes' and xstatus<>'Resigned'"
+        rows 30
+		
+        objects xroom attrib(link "abc" embed onclick="return updateParent(this:'$')"), ~
+                xdesc,xroomtype,xfloor//,xward,descdd equals((select xdesc from caitem where caitem.zid=caroomheader.zid and caitem.xitem=caroomheader.xitem))
+                
+     
+		headers "Room No","Description","Room Type","Floor"
+	 end list
+
+

@@ -1,0 +1,151 @@
+screen xcodesroomtype
+     sidebar list one
+     sections form one, jscript myscript
+
+     list one
+	 caption "Room Type"
+        table xcodes
+        order xcode
+        select "xtype='Room Type'"
+        rows 100
+	
+        objects  xtype,xcode attrib(link "login?screen=xcodesroomtype&command=Show&xcode=?"),~
+               // xlong,xitem,desc equals((select xdesc from caitem where zid=xcodes.zid and xitem=xcodes.xcode and xcodes.xtype='Room Type')),zactive
+                xlong,zactive
+				field xtype
+					display hidden
+				end field
+
+        //headers "" ,"Code","Long Descirption","Charge Code","Description","Status"
+     end list
+	 
+	 list detail
+        caption "Detail List Of: "+xcode
+        table mmroomtypecharge
+        order xtype,xcode,xitem
+        fixed xtype,xcode
+        rows 20
+		maxwidth 400
+        objects xitem,descd equals((select xdesc from caitem where zid=mmroomtypecharge.zid and xitem=mmroomtypecharge.xitem)),price equals((select xipprice from caitem where zid=mmroomtypecharge.zid and xitem=mmroomtypecharge.xitem))
+			headers "Charge Code","Description","IP Price"
+     end list
+
+
+     form one
+
+     caption "<ACRONYM>Room Type</ACRONYM>"
+        table xcodes
+        order xcode
+        select "xtype='Room Type'"
+        return "login"
+        layout 2
+        pstyle 3
+        objects Show,Clear,Add,Update, Delete,~//Charge_Setup,~
+                Top,Previous,Next,Bottom,"<p>" ,~
+                xtype,xcode width(10),~
+                xlong display(text),xamount,zactive,xpkey display(hide) attrib(local) //,xstype display(const)
+
+        field xtype
+          display hide
+          caption Type
+			event after
+				set globals(xtype)=xtype
+			end event
+        end field
+		
+		field show
+			event after
+				set xpkey=xcode
+			end event
+        end field
+		
+		field xamount
+          caption Room Cost
+        end field
+		
+		
+		field xcode
+			
+			pick list xcodeall
+		event after
+			set globals(xtype)=xtype
+			set globals(xcode)=xcode
+		end event
+         end field	
+
+
+	
+
+        field xlong
+          width 40
+          height 2
+          //column 2
+        end field
+
+        field add
+          event before
+			 set xtype="Room Type"
+			 set zactive="1"
+			 if xcode .eq. ""
+				error "Please Select Code" 
+			 end if
+			 
+          end event
+        end field
+		
+        field update
+          event before
+		   set xcode=#trim(xcode)
+		   set xlong=#trim(xlong)
+		   set xitem=#trim(xitem)
+		   if xpkey .ne. xcode
+				error "Please press show first!"
+		   else if xcode .eq. ""
+				error "Please Select Code"	
+			else if xlong .eq. ""
+				error "Please Select Descirption"
+		   end if
+          end event
+        end field	
+		
+		field Charge_Setup
+			    width 100
+				height 40
+				embed onclick="clicked(this)"
+			end field
+
+		
+		
+        
+        embed onsubmit="submitit(this)"
+     end form
+
+
+
+
+
+     jscript myscript
+
+        <script language="javascript" type="text/javascript">
+        var detail
+        function clicked(b){
+          detail=b.value
+        }
+        function budgeted(b){
+          detail="budgeted"
+        }
+        function submitit(form){
+
+    	    if (detail=="Charge_Setup"){
+            form.screen.value = "mmroomtypecharge"
+            form.searchbutton.value = "Clear"
+            //return false
+          }
+        }
+
+        </script>
+     end jscript
+
+
+
+end screen

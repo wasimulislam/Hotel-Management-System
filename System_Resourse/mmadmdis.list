@@ -1,0 +1,14 @@
+     list mmadmdis
+        caption "Guest Registration: "+zvalue
+        table mmregistration
+        order xadmissionno
+        select "((xpatient like '%"+zvalue+"%' or xadmissionno like '%"+zvalue+"%' or xname like '%"+zvalue+"%' or xmobile like 'zvalue%') and left(xadmissionno,4)='RES-')"
+	    //searchselect "(left(xadmissionno,4)='RES-' or xname like '%"+zvalue+"%' or xmobile like 'zvalue%')"
+		//lengthfield 2
+        rows 10
+        objects xadmissionno attrib(link "abc" embed onclick="return updateParent(this:'xadmissionno')"), ~
+                xpatient,xname,xmobile,xstatus//,xroomtype,xward,xfloor
+	  header "Admission No","Guest Name","Guest ID","Phone No","Status"//,"Room No","Room Type","Ward","Floor"
+     end list
+
+

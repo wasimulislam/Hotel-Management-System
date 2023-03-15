@@ -1,0 +1,21 @@
+     list xitempos
+        caption "Items containing: "+zvalue
+        //table caitemchargeview //(select zid,xitem,xdesc,xopprice,zactive,xgitemdes,xtheircode from caitemchargeview where zactive=1) as tbl
+         table caitem 
+        //order xdesc
+		//linksql select xdesc from caitemchargeview //tbl
+		linksql select xdesc from caitem 
+        //select "(xitem like '%"+zvalue+"%' or xdesc like '"+zvalue+"%' or xtheircode like '"+zvalue+"%') and xopprice > 0"
+        select "(xitem like '%"+zvalue+"%' or xdesc like '"+zvalue+"%' ) and xopprice > 0"
+        //searchselect "(xdesc like '%zvalue%' or xitem like '%zvalue%' or xtheircode like '%zvalue%') and xopprice > 0"
+		searchselect "(xdesc like '%zvalue%' or xitem like '%zvalue%' ) and xopprice > 0"
+		lengthfield 2
+		rows 60
+        objects xitem attrib(link "abc" embed onclick="return updateParent(this:'$')"), ~
+                xdesc,xopprice	//,xtheircode
+				
+	
+	headers "Item","Description","Price"	//," Old Code"
+     end list
+
+

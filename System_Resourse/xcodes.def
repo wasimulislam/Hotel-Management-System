@@ -1,0 +1,258 @@
+product ZAB ERP
+
+table xcodes
+  caption "Codes"
+  columns ztime, zutime,zauserid,zuuserid, zid, xtype, xcode, xlong, zactive,xacc,xaccvat,~
+          xaccdisc,xaccait,xaccret,xaccpur,xaccwo,xprops,xmadd,xphone,xfax,xemail,xarea,xwh,xregion,~
+		  xfield,xterritory,xhrc1,xdeptname,xtypeobj,xtrcode,xtargetshare,xpercent,xdepmethod,xaccother,~
+		  xtwh,xshiftimin,xshiftimout,xattimecon,xemptimeout,xincholiday,xtypestore,xproject,xmaxbal,~
+		  xapplyat,xappleave,xservicetenure,xmonthlymax,xstype,xamount,~
+		  //New
+		  xvatrate,xnum,xinc,xprefix,xipaddress,xaccadj,xhrc2,xhrc3,xhrc4,xhrc5,xplaning,~
+		  xcostcenter,xprofitcntrcat,xaccrsc,xaccsupptax,xaccsradj,xaccrc
+
+				
+
+
+  primary key zid, xtype, xcode
+  
+  foreign key
+        zid references zbusiness.zid
+  end foreign key
+  
+  list xlong,zactive
+  
+  field xcode
+    pick list xcodeall
+  end field 
+
+  field xplaning
+    display hide
+  end field
+  
+  field xstype
+	 display hide
+  end field
+  
+  field xamount
+	 display hide
+  end field
+  
+  field xmonthlymax
+    display hide
+  end field
+
+  field xmaxbal
+    display hide
+  end field  
+  
+  field xapplyat
+    display hide
+  end field
+
+  field xappleave
+    display hide
+  end field
+
+
+  field xservicetenure
+    display hide
+  end field   
+
+  field xtrcode
+    display hide
+  end field
+  
+  field xproject
+    display hide
+  end field  
+  
+  field xterritory
+    display hide
+  end field
+
+  field xtargetshare
+    display hide
+  end field
+
+  field xtypeobj
+    display hide
+  end field
+
+  field xfield
+    display hide
+  end field
+  
+   field xincholiday
+    display hide
+  end field 
+
+  field xregion
+    display hide
+  end field
+
+  field xwh
+    display hide
+  end field
+
+  field xarea
+    display hide
+  end field
+
+  field xmadd
+    display hide
+  end field
+
+  field xphone
+    display hide
+  end field
+
+  field xfax
+    display hide
+  end field
+  
+  field xtypestore
+    display hide
+  end field
+
+  field xemail
+    display hide
+  end field
+
+  field xacc
+    display hide
+  end field
+
+  field xaccvat
+    display hide
+  end field
+
+  field xaccdisc
+    display hide
+  end field
+
+  field xaccait
+    display hide
+  end field
+
+  field xaccret
+    display hide
+  end field
+
+  field xprops
+    display hide
+  end field
+
+  field xaccpur
+    display hide
+  end field
+
+  field xaccwo
+    display hide
+  end field
+
+  field xhrc1
+    display hide
+  end field
+  
+  field xhrc2
+    display hide
+  end field
+
+  field xhrc3
+    display hide
+  end field
+
+  field xhrc4
+    display hide
+  end field
+
+  field xhrc5
+    display hide
+  end field  
+
+  field xdeptname
+    display hide
+  end field
+  
+   field xpercent
+    display hide
+  end field 
+  
+   field xdepmethod
+    display hide
+  end field   
+    field xaccother
+    display hide
+   end field 
+
+   field xtwh
+    display hide
+  end field   
+  
+   field xshiftimin
+    display hide
+  end field   
+  
+   field xshiftimout
+    display hide
+  end field 
+
+   field xattimecon
+    display hide
+  end field 
+
+   field xemptimeout
+    display hide
+  end field  
+  
+   field xvatrate
+	display hide
+   end field 
+   
+   field xnum
+	display hide
+   end field
+   
+  field xinc
+  display hide
+  end field
+  
+   field xprefix
+	display hide
+   end field
+   
+   field xipaddress
+	display hide
+   end field
+   
+    field xaccadj
+		display hide
+	end field
+ 
+  field xcostcenter
+	 display hide
+  end field 
+  
+  field xprofitcntrcat
+	 display hide
+  end field
+
+  field xaccrsc
+    display hide
+  end field 
+
+  field xaccsupptax
+	 display hide
+  end field  
+
+  field xaccsradj
+	 display hide
+  end field
+
+  field xaccrc
+	 display hide
+  end field   
+
+  end table
+

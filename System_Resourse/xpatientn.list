@@ -1,0 +1,15 @@
+list xpatientn
+        caption "Guest List"
+        table mmpatientview2
+        order xpatient desc
+		linksql select xname from mmpatientview2
+        select "(xpatient like '%"+zvalue+"%' or xname like '%"+zvalue+"%' or xmobile like '%"+zvalue+"%')"
+		//searchselect "(xpatient like '%zvalue%'  or xname like '%"+zvalue+"%' or xmobile like 'zvalue%')"
+		lengthfield 4 
+        rows 20
+        objects xpatient attrib(link "abc" embed onclick="return updateParent(this:'$')"), ~
+                xname,xmadd,xmobile,xsex
+        //totals "","Totals","","","","",sum,sum
+		
+        headers "Guest ID","Guest Name","Address","Mobile","Gender"
+end list

@@ -1,0 +1,271 @@
+screen mmadmission 
+	sidebar list admbook 
+	sections  form one, jscript myscript
+  
+	list admbook
+		caption "Booking List"
+		table mmregistration
+		order xadmissionno
+		select "left(xadmissionno,4)='RES-' " 
+		rows 20
+		objects	xadmissionno attrib(link "login?screen=mmadmission&command=Show&xadmissionno=?"), ~
+				xpatient,xstatus
+		header "Reservation ID","Guest ID","Reservation Status"
+
+	end list
+	     
+	form one
+        caption "Create Reservation"
+        table mmregistration
+	    primarykey xadmissionno
+        order xadmissionno
+        select "left(xadmissionno,4)='RES-'"
+        return "login"
+        layout 2
+        pstyle 3
+        objects Show,Clear,Add,Update,Delete,Guest_Registration,Confirm,Cancel,Top,Previous,Next,Bottom,"<p>" ,~ 
+                xadmissionno,,xadmtype display(hide), xpatient,xpatientdesc display(const), ~
+				xpaadmittype,xroomtype,xadmdate,xadmtime,xadmtimelocal, ~ 
+				xlengthofstay display(hidden),xondisdate,xdistime,xadult,~
+			    xchild,xstatus,xnote display(hide),xpkey display(hide) attrib(local),xname display(hide),xmobile display(hide)
+			   
+		field show
+			event after
+				set xpkey=xadmissionno
+			end event
+        end field
+		  
+		field xadmdate
+			caption <span class=sheader style="	BACKGROUND:#563d7c;color:white;PADDING-BOTTOM: 2px;PADDING-LEFT: 7px; PADDING-RIGHT: 75px; 	PADDING-TOP: 2px;">Check IN Date </span>
+		end field
+		
+		field xondisdate
+			caption <span class=sheader style="	BACKGROUND:#563d7c;color:white;PADDING-BOTTOM: 2px;PADDING-LEFT: 7px; PADDING-RIGHT: 75px; 	PADDING-TOP: 2px;">Check Out Date </span>
+		end field
+		  
+		field xadult
+			//embed required
+			caption Adult
+			display text
+			texttype number
+		end field
+		
+		field xchild
+			//embed required
+			caption Child
+			display text
+			texttype number
+		end field
+		
+		field xmobile
+			caption Emergency Contact No (Optional)
+		end field
+		 
+		field xpaadmittype
+			caption Guest Type
+			Default "General"
+			display combo
+		end field
+
+        field xadmissionno
+			width 20
+			Caption Reservation ID
+			pick list mmadmdis
+            event after
+				set globals(xadmissionno)=xadmissionno
+				set globals(xpatient)=xpatient
+				set globals(xname)=xname 
+			end event
+        end field
+		 
+		
+		field xadmdate
+			details xdistime
+		end field
+		
+		field xroom
+          //pick list caroom
+		  caption Room
+		end field
+		
+		field xstatus
+			caption Reservation Status
+		end field
+		 
+		field xadmtime
+			//caption Check In Time
+			caption <span class=sheader style="	BACKGROUND:#563d7c;color:white;PADDING-BOTTOM: 2px;PADDING-LEFT: 7px; PADDING-RIGHT: 75px; 	PADDING-TOP: 2px;">Check IN Time </span>
+			default #time
+		end field
+		
+		field xadmtimelocal
+		   attrib local
+			display hidden
+			caption Admission Time
+			event after
+				if xadmissionno .ne. ""
+				 set xadmtimelocal=#sesql("select FORMAT(CAST('"+xadmtime+"' AS datetime), 'hh:mm tt') ")
+				else 
+				 set xadmtimelocal=#sesql("select right(convert(varchar(32),GETDATE(),100),8)")
+				end if
+			end event
+		end field
+		
+		field xadmdtlocal
+			attrib local 
+			width 180
+			caption <span class=sheader style="	BACKGROUND:#563d7c;color:white;PADDING-BOTTOM: 2px;PADDING-LEFT: 7px; PADDING-RIGHT: 75px; 	PADDING-TOP: 2px;">Check In Information </span>
+			display const
+			event after 
+				set xadmdtlocal="<font size=+1 color=green>"'+xadmdatelocal+'"</font>"+"<font size=+1 color=blue>"'+xadmtimelocal+'</font>" 
+			end event
+		end field
+		 
+		field xdistime 
+			caption <span class=sheader style="	BACKGROUND:#563d7c;color:white;PADDING-BOTTOM: 2px;PADDING-LEFT: 7px; PADDING-RIGHT: 75px; 	PADDING-TOP: 2px;">Check Out Time </span>
+			default #time
+		end field 
+		
+		field xdmtimelocal
+			attrib local
+			display hidden
+			caption Admission Time
+			event after
+				if xadmissionno .ne. ""
+					set xdmtimelocal=#sesql("select FORMAT(CAST('"+xdistime+"' AS datetime), 'hh:mm tt') ")
+				else 
+					set xdmtimelocal=#sesql("select right(convert(varchar(32),GETDATE(),100),8)")
+				end if
+			end event
+		end field
+		 
+		field xdmdtlocal
+			attrib local 
+			width 180
+			caption <span class=sheader style="	BACKGROUND:#563d7c;color:white;PADDING-BOTTOM: 2px;PADDING-LEFT: 7px; PADDING-RIGHT: 75px; 	PADDING-TOP: 2px;">Check Out Information </span>
+			display const
+			event after 
+				set xdmdtlocal="<font size=+1 color=green>"'+xdmtimelocal+'"</font>"+"<font size=+1 color=blue>"'+xdmtimelocal+'</font>" 
+			end event
+		end field 
+		
+		field xpatient
+			width 20
+			caption Guest ID
+			pick list xpatientn
+			embed required 
+        end field
+		
+		field xpatientdesc
+			caption Guest Information
+			attrib local
+			display const
+			event after 
+				set Name=mmpatient.xname("xpatient='"+xpatient+"'")
+				set Gender=mmpatient.xsex("xpatient='"+xpatient+"'")
+				set xpatientdesc="Name:"+Name
+				set xpatientdesc=xpatientdesc+"<br>Gender: "+Gender
+			end event
+        end field
+		 
+		field xnote
+          column 3
+		  width 100
+        end field
+ 
+        field add
+			event before
+				set xstatus="Open"
+				set xname=mmpatient.xname("xpatient='"+xpatient+"'")
+				set xmobile=mmpatient.xmobile("xpatient='"+xpatient+"'")
+				set year=#sub(xdate,0,4)
+				set per=#sub(xdate,5,2)
+				set day=#sub(xdate,8,2)
+				set xyearperdate = year+per+day 
+				set year = #sub(xadmdate,2,2)  
+				set admissionno = #trn("Reservation ID","RES-",10) 
+				set xadmissionno = #sub(admissionno,0,4)+year+#sub(admissionno,4,6)   
+			end event 
+			event after  
+				//set temp = #sql("update mmregistration set xstatus='Open' where xadmissionno='"+xadmissionno+"'") 
+				action show
+			end event
+        end field
+         
+		field Confirm
+			width 150
+			height 40 
+			event after
+			set temp = #sql("update mmregistration set xstatus='Confirmed' where xadmissionno='"+xadmissionno+"'") 
+			action show
+			end event
+		end field
+		
+		field Update
+		    event before
+			    set xname=mmpatient.xname("xpatient='"+xpatient+"'")
+				set xmobile=mmpatient.xmobile("xpatient='"+xpatient+"'")
+			end event
+		end field
+	 
+		field Cancel
+			width 150
+			height 40
+			event before  		
+			end event
+			event after
+				set temp = #sql("update mmregistration set xstatus='Cancelled' where xadmissionno='"+xadmissionno+"'") 
+			action show
+			end event
+		end field
+		  
+		field Guest_Registration
+			width 126
+			height 40
+			embed onclick="clicked(this)"
+		end field
+		
+		field Confirm
+			width 100
+			embed onclick="clicked(this)"
+		end field
+  
+		field Cancel
+		    width 100
+			embed onclick="clicked(this)"
+		end field
+
+        field Details
+			width 106
+			height 40
+			embed onclick="clicked(this)"
+        end field		
+
+	embed onsubmit="submitit(this)"
+
+
+	end form
+	 
+	jscript myscript
+
+        <script language="javascript" type="text/javascript">
+        var detail
+        function clicked(b){
+          detail=b.value
+        }
+        function budgeted(b){
+          detail="budgeted"
+        }
+        function submitit(form){
+
+    	    if (detail=="Guest_Registration"){
+            form.screen.value = "mmpatient"
+            form.searchbutton.value = "Clear"
+            //return false
+          }
+        }
+
+        </script>
+     end jscript
+ 
+end screen

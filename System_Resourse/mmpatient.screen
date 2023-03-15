@@ -1,0 +1,244 @@
+screen mmpatient  
+	sections form one, jscript myscript
+	
+	form one
+        caption "Guest Registration"
+        table mmpatient
+	    primarykey xpatient
+        order xpatient 
+        return "login"
+        layout 3
+        pstyle 3
+        objects Show,Clear,Add,Update,Delete,Create_Reservation,Check_In,Check_Out,Top,Previous,Next,Bottom,~ 
+                xpatient,xname,xsex,xmobile,~
+				xnationality,xnid,xpassport,xclinic,~ 
+				xemail,,xdum,~
+				,,,xmadd,xarea,xthana,xcountry,xdate display(const),~  
+				zactive display(hide),xpkey attrib(local) display(hide),xnote display(hide),xstatuscus display(hide) 
+				
+		field xname
+			caption Name
+			embed required
+		end field
+		
+		field xclinic
+			caption VISA 
+			width 30
+		end field
+		
+		field xnationality
+		pick
+		display text
+		end field
+		
+		field xcountry
+		pick
+		display text
+		end field
+		  
+		field xvillage
+			caption Village/Street
+		end field
+		     
+		field xpatient
+			width 20
+			caption Guest ID
+			pick list xpatientn 
+        end field
+		  
+		field xarea
+			caption State / Province
+			display text
+			width 40
+			pick
+		end field
+		
+		field xnid
+			width 40
+		end field
+		 
+		field xdum
+		  attrib local
+		  display const
+		  caption <font color=maroon size=+2>Address</font>
+		  //column 
+		end field
+		  
+		field xsex
+		  //width 40	  
+			//embed required
+			display radio-horizontal
+		end field
+		  
+		field xvoterid
+		  width 40
+		end field
+		
+		field xpassport
+		  width 40
+		end field
+		
+		field xcitizenship
+			width 40
+		end field
+		
+		field xlanguage
+			width 40
+			display radio-horizontal
+		end field
+		
+		field xoccupation
+			pick "select xcode,xlong from xcodes where xtype='Occupation' and zactive='1'"
+			display combo2
+			
+			width 40
+		end field
+		
+		
+		field xmobile
+			width 40
+			embed required placeholder="01XXXXXXXXX"  onblur="validateMobile()"
+			caption Phone No.
+		end field
+		
+		field xemail
+			width 40
+			embed onblur="validateEmail()" 
+		end field
+		 
+		field xvillage
+			width 40
+		end field
+		  
+		field xmadd
+			caption Village/Street
+			display text
+			width 41
+		end field
+		 
+		field xpadd
+			caption Village/Street
+			display text
+			width 41
+		end field
+		  
+        field xdate
+			width 80
+          caption Date of Registration
+        end field
+        
+        field xgcus
+          pick code Patient Group
+        end field
+ 
+		field xnote
+			caption Remarks
+			width 80
+			height 2
+			column 2
+		end field
+		 
+		field show
+			event after 
+				set xpkey=xpatient
+			end event
+        end field
+		
+        field next
+			event after
+				set xpkey=xpatient
+			end event
+        end field
+		
+        field previous
+			event after
+				set xpkey=xpatient
+			end event
+        end field
+		
+		field Top
+			event after
+				set xpkey=xpatient
+			end event
+        end field
+		
+        field Bottom
+			event after
+				set xpkey=xpatient
+			end event
+        end field
+ 
+        field add
+			event before 
+				set xstatuscus="Open"  
+				set patient = #trn("Guest Number","GID-",10)
+				set xpatient=#sub(patient,4,#len(patient)) 				
+			end event 
+			event after 
+				print "Guest Registration Successful"
+				action show
+			end event
+        end field
+
+        field update
+			event before 
+				if xpkey .ne. xpatient
+					error "Please show first" 
+				end if 
+			end event 
+			event after 
+				action show	
+			end event
+        end field
+		 
+		field Create_Reservation
+			width 126
+			height 40
+			embed onclick="clicked(this)"
+		end field
+	  
+		field Check_In
+				width 100
+				height 40
+				embed onclick="clicked(this)"
+		end field
+	  
+		field Check_Out
+			width 100
+			height 40
+			embed onclick="clicked(this)"
+		end field
+       	    
+		embed onsubmit="submitit(this)"
+		
+	end form
+	 
+	jscript myscript
+
+        <script language="javascript" type="text/javascript">
+        var detail
+        var result
+        function clicked(b){
+          detail=b.value
+        }
+        function submitit(form){
+          result = true
+          if (detail=="Create_Reservation"){
+            form.screen.value = "mmadmission"
+            form.searchbutton.value = "Clear"
+          }
+          if (detail=="Check_In"){
+            form.screen.value = "checkin"
+            form.searchbutton.value = "Find xitem=?"
+          }
+		  if (detail=="Check_Out"){
+            form.screen.value = "checkout"
+            form.searchbutton.value = "Find xitem=?"
+          }
+          detail = ''
+          return result
+        }
+        </script>
+	end jscript 
+
+end screen

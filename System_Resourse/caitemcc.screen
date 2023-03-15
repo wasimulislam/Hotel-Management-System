@@ -1,0 +1,193 @@
+screen caitemcc
+
+   sidebar list amcitem
+     sections form detail, jscript myscript
+
+		list amcitem
+        caption "Catering Charges List"
+        table caitem
+        order xitem
+        //select "xgitem='1003'"
+        rows 20
+        objects  xitem attrib(link "login?screen=caitemcc&command=Show&xitem=?"), ~
+                 xdesc,xopprice
+
+        header "Item","Description","Price"
+				
+
+     end list
+
+     form detail
+        caption "Catering Charges"
+        table caitem
+	    primarykey xitem
+        order xitem
+		//select "(xgitem in ((select xcode from xcodes where xtype='Item Group' and xstype='CATERING CHARGES')))"
+		select "xgitem='1003'"
+		//select "xstype='CATERING CHARGES'"
+        return "login"
+        layout 2
+        pstyle 3
+        objects Show, Clear,Add,Update, Delete,*next,~
+                Top, Previous, Next, Bottom,~//Price,"</b></font><p>" ,~
+                xitem , ~
+                xdesc width(50),~
+                xcitem display(hide),~
+                xopprice,~              
+				xgitem display(hide),~//oxtitem,~
+				xwh display(hide),xsup display(hide),xpkey attrib(local) display(hide),zactive
+				
+
+        
+
+        field show
+		event after
+          set xpkey=xitem
+		  end event
+        end field
+		
+		field xcitem
+          caption Visit Type
+          pick code Visit Type
+        end field
+		
+		field xopprice
+          caption Price
+        end field
+		
+		field xtitem
+	    pick "select xcode,xlong from xcodes where zactive='1' and xtype='Item Type'"
+		display combo2
+		width 30
+		end field
+
+
+        field xdocname
+          attrib local
+          display const
+          caption Name
+          event after
+            set xdocname=pdmst.xname("xstaff='"+xtitem+"'")
+          end event
+        end field
+
+		field xitem
+			pick list xitemcc
+          event after
+            set globals(xitem)=xitem
+			if xitem .ne. ""
+				set #field(xopprice.display)="const"
+				//set #field(xipprice.display)="const"
+			end if
+          end event
+        end field
+		
+		field show
+			event after
+				set xpkey=xitem
+			end event
+        end field
+		
+        field next
+			event after
+				set xpkey=xitem
+			end event
+        end field
+		
+        field previous
+			event after
+				set xpkey=xitem
+			end event
+        end field
+		
+		field Top
+			event after
+				set xpkey=xitem
+			end event
+        end field
+		
+        field Bottom
+			event after
+				set xpkey=xitem
+			end event
+        end field
+		
+	
+ 	  field add
+		event before
+		 set desc=#sql("select xdesc from caitem where xgitem='1003' and xdesc='"+xdesc+"'")
+		   if xdesc .eq. ""
+				error "Please Select Charge Description!"
+				else if desc .eq. xdesc
+				error "This Catering Charge Already exists"
+				else if xopprice<=0.00 //.and. xipprice<=0.00
+				error " Please Add Price for Charge!"
+				else
+				set xgitem="1003"
+				set item = #trn("Item Code","IC--",10)
+		        set xitem=#sub(item,4,#len(item))
+			end if
+		end event
+	  end field
+	  
+	  field update
+		  event before
+		  
+		  if xpkey .ne. xitem
+				error "Please show first!"
+		  end if
+		  if xdesc .eq. ""
+				error "Please Select Charge Description!"
+				
+				else if xopprice<=0.00 //.and. xipprice<=0.00
+				error " Please Add Price for Charge!"
+			end if
+	  end event
+	  end field
+	  
+	   field delete
+		  event before
+		  if xpkey .ne. xitem
+				error "Please show first"
+		  end if
+	  end event
+	  end field
+
+       embed onsubmit="return submitit(this)"
+
+       
+
+        field Price
+          embed onclick="clicked(this)"
+		  width 100
+        end field
+
+     end form
+
+
+     jscript myscript
+
+        <script language="javascript" type="text/javascript">
+        var detail
+        var result
+        function clicked(b){
+          detail=b.value
+        }
+        function submitit(form){
+          result = true
+          if (detail=="Bonus"){
+            form.screen.value = "cabonus"
+            form.searchbutton.value = "Find xitem=?"
+          }
+          if (detail=="Price"){
+            form.screen.value = "caitempricecc"
+            form.searchbutton.value = "Find xitem=?"
+          }
+          detail = ''
+          return result
+        }
+        </script>
+     end jscript
+
+
+end screen

@@ -1,0 +1,60 @@
+product ZAB ERP
+
+table mmadmission
+
+  caption "Patient Admission"
+  columns ztime,zutime,zauserid,zuuserid,zid,xadmissionno,xadmdate,xpatient,xcus,xdoctor,~
+          xstatus,xroom,xbedno,xnote,xconsultant,xitem,xstatuspack,xrate,~
+          xvisittype,xvisitno,xday,xlengthofstay,xdiagnosis,xondisdate,xage,xsex,xbirthdate,~
+          xdistype,xdisdate,xfloor,xwing,xroomtype,~
+		  //new
+		  xepisodeno,xepisodetype,xadmtime,xadmtype,xkin,xkinmobile,xemconame,xkinphoneres,~
+          xrefdoctor,xcauseadm,xamdrefno,xyearperdate,xtdated,xtemplatename,xrem,xdistime,~
+		  //Diet
+			xreqno,xward,xmealtype,xcurrdiet,xdietreq,xspecialfood,xcalorie,xheightvit,xweightvit,xbmigyn,xmodeoffeeding,xdietdetails,xstatusdtreq,xnote1,xstatusndtreq,~
+			//IPD Assessment
+		xmedicolegalcase,xdatetimein,xsuspecteddisease,xfinaldiagnosis,xchiefcomplain,xfoodall,xdrugall,xexamination,xrbs,xvitalcheckup,~
+		xsebloodpressure,xspo2,xfamilyhistory,xsocialhistory,xdrughistory,xstatuspharma,xpast,xbimage,~
+		xrespiration,xcvs,xabdomen,xcns,xposfinding,xprovdiagnosis,xinvestigations,xotherinfo,xecg,~
+		xblood,xtropi,xabg,xsignificantothers,xmanagementined,xpatientdisposition,xvitalcondition,xadmittedto,xpulserate,xrr,~
+		xproposedtreatment,xedspecialist,xedopinion,xreferralto,xrefopinion,~
+		
+		
+		//IPD Prescription
+		xstatusipdpresc,xsendpharmaid,xsendpharmadt,xrejnote,xrejectid,xipdorder,xdispensenote,xdietdetails,xcauti,xclabsi,xpresc,xstatusfnb,xssi,xvap,~
+		xacapprove,xdisstatus,xfwh,xref,xtwh,~
+		xstarttime,xboarddate,xvenue,~
+		
+		
+		//Diet
+		xcostitem,xqty,xunit,zactive,xdayname,xchapati,xvegetables,xbread,xbutterjam,xcereals,xegg,xfruit,xdessert,~
+		xtcm,xmidmornsoup,xeveningsnack,xrice,xdal,xnonveg,xsalad,xkhichuri,xotherfd,xhealthdrnk,xfdate,~
+		
+		////inpatient Initial patiet assestment...............................
+		xarrivaltm,xallergyse,xallergy,xdrugallargy,xbloodtron,~
+		xothbloodtron,xfoodalliy,~
+		xallother,xpainselect,xpainloc,xpaincher,xpastmed,xpastsurg,xlifstyle,xsmoking,xdrinking,xrecdu,~
+		xoccupation,xmeandobhistory,xpallor,xicterus,xphyclubbing,xedema,xlymphadenopathy,xrespiratory,~
+		xgastrointsys,ximmunocomsta,xurlocomsys,xskinoent,xisolationrequ,xisolationrequyes,xpsychologicaleva,~
+		xpsyotherinfo,xplanecare,xpainscorere,~
+		xinvest,xsshome,xheanticipated,xphysiotherapy,xwoundcare,xpmanagement,xspecialdietary,xcontinousanti,~
+		xotherspecial,xnaturesafadd,xotherdescherge,xscdisease,xicstatus,~
+		xpains,xresidoctorn,xdoctorreg,xdrdate,xconsultentname,xconsulreg,xcondate,xpatientname,xpatientreg,xpatdate,~
+		xweightloss,xpatientseill,xreducedietery,xrelation,xdotime,xconstime,xpattime,xinvestigation,~
+		
+		//New
+		xoldadmissionno,xclinicianid,xcase,xdptname,xconfirmid,xmobile,xselection,xnight,xadult,xchild,xname
+		
+		
+		
+		
+		
+  primary key zid,xadmissionno
+  
+  foreign key
+        zid references zbusiness.zid
+  end foreign key
+end table
+
+
+	

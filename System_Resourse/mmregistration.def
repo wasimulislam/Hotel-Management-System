@@ -1,0 +1,21 @@
+product ZAB ERP
+
+table mmregistration
+
+  caption "Guest Registration"
+  columns ztime,zutime,zauserid,zuuserid,zid,xadmissionno,xpatient,xcus,xdoctor,~
+          xstatus,xroom,xbedno,xitem,xroomtype,~
+		  xadmtime,xadmdate,xdistime,xondisdate,xadult,xchild,xpaadmittype,xadmtype,~
+		  xage,xmobile,xname,xsex,xnight,xfloor,xwing,xlengthofstay,xnote,xepisodeno ,xepisodetype ,xdisdate ,xstatuspack ,~
+		  xyearperdate ,xcurrdiet ,xward ,xdietreq 
+		
+
+  primary key zid,xadmissionno
+  
+  foreign key
+        zid references zbusiness.zid
+  end foreign key
+end table
+
+
+	

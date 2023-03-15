@@ -1,0 +1,16 @@
+product ZAB ERP
+
+table roombookingdetail
+
+  caption "Room Booking Details"
+
+  columns ztime,zutime,zauserid,zuuserid,zid,xyear,xper,xday,xrow,xroom,xroomtype,xdesc,xstatus
+
+          
+  primary key zid,xyear,xper,xroom,xrow
+
+  foreign key
+        zid references zbusiness.zid
+		zid,xyear,xper references roombooking.zid,xyear,xper
+  end foreign key
+end table

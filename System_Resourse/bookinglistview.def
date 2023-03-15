@@ -1,0 +1,48 @@
+product ZAB ERP
+
+table bookinglistview
+  caption "Room Booking List"
+  columns zid,xrow,xroom,xyear,xper,day1,day2,day3,day4,day5,day6,day7,day8,day9,day10,day11,day12,day13,day14,day15,day16,day17,day18,day19,day20,day21,day22,day23,day24,day25,day26,day27,day28
+
+  primary key zid,xroom
+
+  foreign key
+        zid references zbusiness.zid
+  end foreign key
+
+  sql create view bookinglistview (zid,xroom,xroomtype,xyear,xper,day1,day2,day3,day4,day5,day6,day7,day8,day9,day10,day11,day12,day13,day14,day15,day16,day17,day18,day19,day20,day21,day22,day23,day24,day25,day26,day27,day28,day29,day30,day31) ~
+                  as select distinct a.zid,a.xroom,a.xdesc,a.xyear,a.xper,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='1'),'')as day1,~ 
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='2'),'')as day2,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='3'),'')as day3,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='4'),'')as day4,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='5'),'')as day5,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='6'),'')as day6,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='7'),'')as day7,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='8'),'')as day8,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='9'),'')as day9,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='10'),'')as day10,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='11'),'')as day11,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='12'),'')as day12,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='13'),'')as day13,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='14'),'')as day14,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='15'),'')as day15,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='16'),'')as day16,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='17'),'')as day17,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='18'),'')as day18,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='19'),'')as day19,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='20'),'')as day20,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='21'),'')as day21,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='22'),'')as day22,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='23'),'')as day23,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='24'),'')as day24,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='25'),'')as day25,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='26'),'')as day26,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='27'),'')as day27,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='28'),'')as day28,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='29'),'')as day29,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='30'),'')as day30,~
+						isnull((select 'Booked' from roombookingdetail b where a.xroom=b.xroom and a.xyear=b.xyear and a.xper=b.xper and b.xday='31'),'')as day31 ~
+						from roombookingdetail a
+				
+end table

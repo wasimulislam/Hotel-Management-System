@@ -1,0 +1,124 @@
+screen roombookingdetail
+
+   sidebar list booking
+   sections form detail, jscript myscript
+
+	list booking
+        caption "Room Booking list"
+        table roombookingdetail
+		order xyear,xper
+        rows 20
+        objects  xrow attrib(link "login?screen=roombooking&command=Show&xyear=?"), ~
+                 xyear,xper,xstatus,xday,xroom,xroomtype,xstatus
+        header "Year","Per","Status"
+     end list
+
+     form detail
+        caption "Room Booking Detail"
+        table roombookingdetail
+	    primarykey xyear,xper
+        order xyear,xper
+        return "login"
+        layout 2
+        pstyle 3
+        objects Show,Clear,Add,Update,Delete,~
+                Top, Previous, Next, Bottom,Return,~
+                xroom,xroomtype,xyear,xper,xday,xrow display(hide),xstatus
+
+        
+        field xyear
+           caption Year 
+        end field
+		
+		field xper
+           caption Month 
+        end field
+		
+		field xstatus
+           caption Status 
+        end field
+		
+		field day
+           caption Day 
+        end field
+		
+		field xroom
+           caption Room No 
+        end field
+		
+		field xroomtype
+           caption Room Type 
+        end field
+		
+		
+		field show
+        end field
+		
+        field next
+        end field
+		
+        field previous
+        end field
+		
+		field Top
+        end field
+		
+        field Bottom
+        end field
+		
+	
+ 	    field add
+		  event before
+		  end event
+	    end field
+	  
+	    field Return
+	    width 80
+		height 35
+		embed onclick="clicked(this)"
+	    end field
+	  
+	    field update
+		  event before
+	      end event
+	    end field
+	  
+	    field delete
+		   event before
+	       end event
+	    end field
+
+        embed onsubmit="return submitit(this)"
+
+
+     end form
+
+
+     jscript myscript
+
+        <script language="javascript" type="text/javascript">
+        var detail
+        var result
+        function clicked(b){
+        detail=b.value
+        }
+        function submitit(form){
+          result = true
+          if (detail=="Return"){
+            form.screen.value = "roombooking"
+            form.searchbutton.value = "Clear"
+          }
+          if (detail=="Create_Reservation"){
+            form.screen.value = "mmadmission"
+            form.searchbutton.value = "Find xitem=?"
+          }
+		  if (detail=="Check_In"){
+            form.screen.value = "checkin"
+            form.searchbutton.value = "Find xitem=?"
+          }
+          detail = ''
+          return result
+        }
+        </script>
+     end jscript
+end screen

@@ -1,0 +1,22 @@
+//opd.menu
+//-------------------------------------------------------------------
+option                           |action
+
+Guest Registration              |#classPath+"/login?screen=mmpatient"
+Create Reservation				|#classPath+"/login?screen=mmadmission"  
+Search Reservation              |#classPath+"/login?screen=mmadmissionsearch"
+Check-In                        |#classPath+"/login?screen=checkin"
+Check-Out                       |#classPath+"/login?screen=checkout"
+//Room Booking                    |#classPath+"/login?screen=roombooking"
+Search Room                     |#classPath+"/login?screen=roombookingsearch"
+
+//Dashboard					|#classPath+"/login?screen=mmadmission"
+//Profile              |#classPath+"/login?screen=mmpatient"                  	|ca		|	|210
+//Reservation                  |#classPath+"/login?screen=mmadmission"
+//Package Assign                |#classPath+"/login?screen=mmipdpackageassign"
+//Patient Admission                |#classPath+"/login?screen=mmadmission"
+//Guest Transfer                 |#classPath+"/login?screen=mmpatienttransfer"
+//Room Type                        |#classPath+"/login?screen=xcodesroomtype"
+//Bed Status                        |#classPath+"/login?screen=xcodes(xtype=Bed Status)"
+//Room Master                      |#classPath+"/login?screen=caroomheader"
+//Search Reservation              |#classPath+"/login?screen=mmadmissionsearch"

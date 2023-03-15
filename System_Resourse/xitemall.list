@@ -1,0 +1,18 @@
+     list xitemall
+        caption "Items containing: "+zvalue
+        table caitem
+        order xitem
+		linksql select xdesc from caitem
+       // select "((xitem like '%"+zvalue+"%' or xdesc like '%"+zvalue+"%' or xitemold like '%"+zvalue+"%') and left(xitem,2)<>'CC')"
+        select "((xitem like '%"+zvalue+"%' or xdesc like '%"+zvalue+"%' ) and left(xitem,2)<>'CC')"
+        searchselect "left(xitem,2)<>'CC'"
+		lengthfield 2
+		rows 30
+        objects xitem attrib(link "abc" embed onclick="return updateParent(this:'$')"), ~
+                //xdesc,xitemold,xmodel,xtitem,xgitem//,xitemdept,xitemsubdept//,xshelf
+                xdesc,xgitem //,xitemdept,xitemsubdept//,xshelf
+				
+	headers "Item","Description","Item Group"	//"Old Code","Model","Manufacturer",
+     end list
+
+

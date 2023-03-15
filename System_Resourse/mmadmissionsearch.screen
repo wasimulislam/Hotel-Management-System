@@ -1,0 +1,238 @@
+screen mmadmissionsearch
+
+     sections  form one, jscript myscript
+
+     form one
+        caption "Search Guest Reservation"
+      	table mmregistration
+	    primarykey xadmissionno
+        order xadmissionno
+        select "left(xadmissionno,4)='RES-'"
+        return "login"
+        layout 2
+        pstyle 3
+        objects Show,Clear,"<p>" ,~
+                xadmissionno ,xpatient display(const),xpatientdesc,xroomtype display(const),~	//xfloor display(const),~
+				xadult display(const),xchild display(const),xadmdate display(const),xondisdate display(const),xstatus display(const)
+
+
+
+        field xpatient
+          width 20
+		  caption Guest ID
+			event after
+            set xpatient=mmregistration.xpatient("xadmissionno='"+xadmissionno+"'")
+          end event
+        end field
+		
+		field xadult
+		  caption Adult
+			event after
+            set xadult=mmregistration.xadult("xadmissionno='"+xadmissionno+"'")
+          end event
+        end field
+		
+		field xchild
+		  caption Child
+			event after
+            set xchild=mmregistration.xchild("xadmissionno='"+xadmissionno+"'")
+          end event
+        end field
+		
+		field xadmdate
+		  caption Check-In Date
+			event after
+            set xadmdate=mmregistration.xadmdate("xadmissionno='"+xadmissionno+"'")
+          end event
+        end field
+		
+		field xondisdate
+		  caption Check-Out Date
+			event after
+            set xondisdate=mmregistration.xondisdate("xadmissionno='"+xadmissionno+"'")
+          end event
+        end field
+		
+		field xroomtype
+		attrib local
+		  caption Room Type
+			event after
+            set roomtype=mmregistration.xroomtype("xadmissionno='"+xadmissionno+"'")
+            set xroomtype=xcodes.xlong("xcode='"+roomtype+"' and xtype='Room Type'") 
+          end event
+        end field
+		
+		field xfloor
+			caption Floor
+			event after
+            set xfloor=mmregistration.xfloor("xadmissionno='"+xadmissionno+"'")
+          end event
+        end field
+		
+		field xpatientdesc
+		caption Guest Information
+           attrib local
+           display const
+           event after
+			    set Name=mmpatient.xname("xpatient='"+xpatient+"'")
+				set Gender=mmpatient.xsex("xpatient='"+xpatient+"'")
+				set xpatientdesc="Name:"+Name
+				set xpatientdesc=xpatientdesc+"<br>Gender: "+Gender
+          end event
+        end field
+		
+		field xadmdatelocal
+			attrib local
+			display hidden
+			caption Reservation Date
+			event after
+				if xadmissionno .ne. ""
+					set xadmdatelocal=#sesql("select convert(VARCHAR,cast('"+xadmdate+"' as datetime), 106)")
+				else
+					set xadmdatelocal=#sesql(" select convert(VARCHAR,GETDATE(), 106)")
+				end if
+			end event
+		end field
+		
+		field xitem
+			width 20
+          caption Package Charge Code
+		 // pick list xitempack
+          pick list xitempackipd
+          
+        end field
+		
+		field xitemdesc
+          attrib local
+          display const
+          caption Package Description
+          event after
+            set xitemdesc=caitem.xdesc("xitem='"+xitem+"'")
+          end event
+        end field
+		
+		
+		field xadmtimelocal
+		   attrib local
+			display hidden
+			caption Admission Time
+			event after
+				if xadmissionno .ne. ""
+				 set xadmtimelocal=#sesql("select FORMAT(CAST('"+xadmtime+"' AS datetime), 'hh:mm tt') ")
+				else 
+					set xadmtimelocal=#sesql("select right(convert(varchar(32),GETDATE(),100),8)")
+				end if
+			end event
+		end field
+		
+		field xadmdtlocal
+			attrib local
+			caption Check In Time
+			//column 2
+			width 180
+			caption <span class=sheader style="	BACKGROUND:#563d7c;color:white;PADDING-BOTTOM: 2px;PADDING-LEFT: 7px; PADDING-RIGHT: 75px; 	PADDING-TOP: 2px;">Check In Date</span>
+			display const
+			event after
+				//set xadmdtlocal=xadmdatelocal+" "+xadmtimelocal
+				set xadmdtlocal="<font size=+1 color=green>"'+xadmdatelocal+'"</font>"+"<font size=+1 color=blue>"'+xadmtimelocal+'</font>"
+				
+			end event
+		end field
+		
+		field xroom
+          caption Room No
+          event after
+            set xroom = mmregistration.xroom("xadmissionno='"+xadmissionno+"'")
+          end event
+        end field
+
+
+        field xstatus
+         // pick "Open,Closed,On Discharge,Cancel"
+          //display combo
+        end field
+
+        field xadmissionno
+          width 15
+          pick list mmadmdis
+		 Caption Reservation ID
+		  //pick list mmadmsearch
+		  event after
+			 //class careports(getReport{mmadmissioncard;2;in,st;zid,admissionno;xadmissionno;Guest Card})
+			 //class careports(getReport{mmbabywristband;2;in,st;@zid,@admissiono;xadmissionno;Baby Patient Wristband})
+			
+			if xadmissionno .eq. ""
+					set #field(xadmtimelocal.display) = "hidden"
+					set #field(xadmdate.display) = "hidden" 
+					set #field(xondisdate.display) = "hidden" 
+			end if
+		  end event
+        end field
+		
+        field xdoctor
+          caption Admitted Doctor
+          pick list pddoctor
+        end field
+
+        field xconsultant
+          pick list pdcons
+        end field
+		
+		field xpatient
+          caption Guest ID
+		  pick list xpatientn
+        end field
+
+        
+
+        field xdname
+          caption Doctor's Name
+          attrib local
+          display const
+          event after
+            set xdname = pdmst.xname("xstaff='"+xdoctor+"'")
+          end event
+        end field
+
+        field xconname
+          caption Doctor's Name
+          attrib local
+          display const
+          event after
+            set xconname = pdmst.xname("xstaff='"+xconsultant+"'")
+          end event
+        end field
+
+        field update
+          event before
+          	if xstatus .eq. "Closed"
+          		set xdisdate=#date
+          	end if
+          end event
+          event after
+            set temp = #spsql(zabsp_PRCS_validateAfterAdmission,#id,#user,"mmdischarge",xpatient,xdate,xadmissionno,xroom,xbedno,xdoctor,12)
+          end event
+           action show
+        end field
+
+        embed onsubmit="submitit(this)"
+
+     end form
+
+     jscript myscript
+
+        <script language="javascript" type="text/javascript">
+        var detail
+        function clicked(b){
+          detail=b.value
+        }
+        function submitit(form){
+
+        }
+
+        </script>
+     end jscript
+
+
+
+end screen
